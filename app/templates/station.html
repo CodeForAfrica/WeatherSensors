@@ -1,0 +1,15 @@
+<!-- index.html-->
+
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block body %}
+<div class="jumbotron">
+  <h3> {{ station.name }}</h1>
+  <p>Last Measurements: {{station.lastMeasurement}}</p>
+  <ul>
+    {% for variable in station.variables %}
+      <li>variable</li>
+    {% endfor%}
+    <ul>
+</div>
+{% endblock %}
