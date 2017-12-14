@@ -41,17 +41,18 @@ def get_stations():
 
 
 def get_station(station_id):
-# Request stations from API
-    response = apiRequest("https://tahmoapi.mybluemix.net/v1/stations/"+station_id)
-    decodedResponse	= json.loads(response)
-# Check if API responded with an error
-    if(decodedResponse['status'] == 'error'):
-    	print "Error:", decodedResponse['error']
-        return {}
-    # Check if API responded with success
-    elif(decodedResponse['status'] == 'success'):
-    	print "API call success, stations retrieved"
-        return decodedResponse
+	# Request stations from API
+	startDate = datetime.datetime.strftime(datetime.datetime.utcnow()-datetime.timedelta(2),'%Y-%m-%dT%H:%M')
+	response = apiRequest("https://tahmoapi.mybluemix.net/v1/timeseries/"+station_id+ "/hourly", { 'startDate': startDate})
+	decodedResponse	= json.loads(response)
+	# Check if API responded with an error
+	if(decodedResponse['status'] == 'error'):
+		print "Error:", decodedResponse['error']
+		return {}
+	# Check if API responded with success
+	elif(decodedResponse['status'] == 'success'):
+		print "API call success, stations retrieved"
+		return decodedResponse
 
 
 def get_timeseries(station_id, startDate, endDate):

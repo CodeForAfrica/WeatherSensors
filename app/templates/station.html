@@ -3,13 +3,33 @@
 {% extends "base.html" %}
 {% block title %}Home{% endblock %}
 {% block body %}
-<div class="jumbotron">
+<div class="">
   <h3> {{ station.name }}</h1>
   <p>Last Measurements: {{station.lastMeasurement}}</p>
-  <ul>
-    {% for variable in station.variables %}
-      <li>variable</li>
+  <style>
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    text-align: center;
+}
+</style>
+  <table>
+    <thead>
+      <th>Time</th>
+    {% for key in timeseries %}
+      <th>{{ key }}</th>
     {% endfor%}
-    <ul>
+  </thead>
+  <tbody>
+    {% for rowIndex in range(timeseries.values()[0]|length) %}
+      <tr>
+        <td>{{ timeseries.values()[0].keys()[rowIndex]}}</td>
+        {% for key in timeseries %}
+          <td>{{ timeseries[key].values()[rowIndex]}}</td>
+        {% endfor%}
+      </tr>
+    {% endfor%}
+  </tbody>
+  </table>
 </div>
 {% endblock %}

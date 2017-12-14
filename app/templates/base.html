@@ -8,21 +8,28 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="https://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src= "https://cdn.zingchart.com/zingchart.min.js"></script>
+		<script> zingchart.MODULESDIR = "https://cdn.zingchart.com/modules/";ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9","ee6b7db5b51705a13dc2339db3edaf6d"];</script>
+    <script src="static/charts.js"></script>
   </head>
   <body>
-    <div class="container">
-      <div class="header clearfix">
-        <nav>
-          <ul class="nav nav-pills pull-right">
-            <li role="presentation"><a href="/">Stations</a></li>
-            <li role="presentation"><a href="/about">About</a></li>
-          </ul>
-        </nav>
+    <header>
+      <div class="row expanded">
+        <div class="col-sm-12">
+          <a href="/" class="logo">Weather Sensors</a>
+          <nav class="secondary-nav">
+            <ul>
+              <li class="show-for-medium"><a href="/stations">Stations</a></li>
+            </ul>
+          </nav>
+        </div>
       </div>
+    </header>
       {% block body %}
       {% endblock %}
       <footer class="footer">
       </footer>
-    </div> <!-- /container -->
   </body>
 </html>

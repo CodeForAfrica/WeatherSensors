@@ -3,11 +3,28 @@
 {% extends "base.html" %}
 {% block title %}Home{% endblock %}
 {% block body %}
-<div class="jumbotron">
-  <h3>Weather Stations</h1>
-  <div>
-    {{stationsMap.html}}
-    {{stationsMap.js}}
+<!-- Hero Banner -->
+<section class="city-data">
+  <div class="top-shadow"></div>
+  <!-- City Map & Detail Info -->
+  <div class="city-detail">
+        <span class="tag white">Weather Stations for Tanzania</span>
+    <h1 class="city-name"> Dar-es-salaam</h1>
+    <a href="/stations" class="other-station"><i></i>Find other stations</a>
   </div>
+  <div class="col-md-12">
+    <div class="col-md-4">
+      <div id='windspeed'></div>
+    </div>
+    <div class="col-md-4">
+      <div id='temperature'></div>
+    </div>
+    <div class="col-md-4">
+      <div id='precipitation'></div>
+    </div>
+    <div class="col-md-4">
+      <div id='pressure'></div>
+    </div>
 </div>
+</section>
 {% endblock %}
