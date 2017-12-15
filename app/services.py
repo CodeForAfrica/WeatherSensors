@@ -42,7 +42,7 @@ def get_stations():
 
 def get_station(station_id):
 	# Request stations from API
-	startDate = datetime.datetime.strftime(datetime.datetime.utcnow()-datetime.timedelta(2),'%Y-%m-%dT%H:%M')
+	startDate = datetime.datetime.strftime(datetime.datetime.utcnow()-datetime.timedelta(1),'%Y-%m-%dT%H:%M')
 	response = apiRequest("https://tahmoapi.mybluemix.net/v1/timeseries/"+station_id+ "/hourly", { 'startDate': startDate})
 	decodedResponse	= json.loads(response)
 	# Check if API responded with an error

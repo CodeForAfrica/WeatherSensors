@@ -12,19 +12,242 @@
     <h1 class="city-name"> Dar-es-salaam</h1>
     <a href="/stations" class="other-station"><i></i>Find other stations</a>
   </div>
-  <div class="col-md-12">
-    <div class="col-md-4">
+  <div class="row">
+    <div class="col-md-4 col-xs-4">
       <div id='windspeed'></div>
+        <script src="{{url_for('static', filename='charts.js')}}"></script>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-4 col-xs-4">
       <div id='temperature'></div>
     </div>
-    <div class="col-md-4">
-      <div id='precipitation'></div>
-    </div>
-    <div class="col-md-4">
-      <div id='pressure'></div>
+    <div class="col-md-4 col-xs-4">
+      <div id='windGConfig'></div>
+      <script>
+      var direction = [];
+      direction[0] = '{{ lastMeasuredWindDirection }}';
+      var speed = [];
+      speed[0] = '{{ lastMeasuredWindSpeed }}';
+      var windGConfig = {
+        "type":"gauge",
+        "background-color":"transparent",
+        "bgcolor": "transparent",
+        "scale":{
+          "size-factor":0.7
+        },
+        "scale-2":{
+          "size-factor":1.1
+        },
+        "scale-r":{ //Default Scale
+          "aperture":200,
+          "values":"0:50:10",
+          "center":{
+            "size":5,
+       	   // "background-color":"#66CCFF #FFCCFF",
+       	    "border-color":"none"
+          }
+        },
+        "scale-r-2":{ //Additional Scale
+          "aperture":360,
+          "values":"360:0:-20",
+          "center":{
+            "size":7,
+       	   // "background-color":"#66CCFF #FFCCFF",
+       	    "border-color":"none"
+          },
+          "guide":{
+            "alpha":0 //Make sure your larger scale's background is set to transparent.
+          }
+        },
+        "series":[
+          {
+            "values":speed,
+            //"scales":"scale,scale-r", //Specify which scale your data should plot to.
+            "csize":"5%",
+            "size":"90%"
+          },
+          {
+            "values":direction,
+            "scales":"scale-2,scale-r-2", //Specify which scale your data should plot to.
+            "csize":"5%",
+            "size":"90%"
+          }
+        ]
+      };
+
+      zingchart.render({
+      	id : 'windGConfig',
+      	data : windGConfig,
+      	height : "300px",
+      	width: "100%"
+      });
+      </script>
     </div>
 </div>
 </section>
+  <section="timeseries">
+  <div class="col-md-12">
+
+    <input id="tab1" type="radio" name="tabs" checked>
+    <label for="tab1">Temperature</label>
+
+    <input id="tab2" type="radio" name="tabs">
+    <label for="tab2">Precipitation</label>
+
+    <input id="tab3" type="radio" name="tabs">
+    <label for="tab3">Wind Speed</label>
+
+    <section id="content1">
+      <div id="tempGraph">
+      </div>
+      <script>
+      var myConfig = {
+        "type": "line",
+        "plot":{"aspect":"segmented"},
+        "series": [{"values":[20,40,25,50,15,45,33,34]}]
+      };
+
+zingchart.render({
+	id : 'tempGraph',
+	data : myConfig,
+	height: "200px",
+	width: "100%"
+});
+      </script>
+
+    </section>
+
+    <section id="content2">
+      <div id="precipitationChart"></div>
+      <script>
+      var myConfig = {
+  "type":"heatmap",
+  "plot":{
+    "aspect":"vertical"
+  },
+  "plotarea":{
+    "adjust-layout":"auto"
+  },
+  "scale-y":{
+    "labels":["0.7 and 1","0 and 0.3","0.2 and 1<br>(default)"]
+  },
+  "series":[
+    {
+      "values": [59,15,5,30,60,99,28,33,34,51,12,30,15,39,15,71,23,51,29,20],
+      "min-ratio":0,
+      "max-ratio":0.3
+    }
+  ]
+};
+
+zingchart.render({
+  id : 'precipitationChart',
+  data : myConfig,
+  height : "100px",
+  width: "100%"
+});
+      </script>
+    </section>
+
+    <section id="content3">
+      <div id="windChart"></div>
+      <script>
+      var windConfig = {
+          "graphset":[
+              {
+                  "scale-x":{
+                      "zooming":1
+                  },
+                  "arrows":[
+                      {
+                          "from":{
+                              "hook":"node:plot=1,index=1"
+                          },
+                          "to":{
+                              "hook":"node:plot=1,index=2"
+                          }
+                      },
+                    {
+                          "from":{
+                              "hook":"node:plot=1,index=2"
+                          },
+                          "to":{
+                              "hook":"node:plot=1,index=3"
+                          }
+                      },
+                    {
+                          "from":{
+                              "hook":"node:plot=1,index=4"
+                          },
+                          "to":{
+                              "hook":"node:plot=0,index=3"
+                          }
+                      }
+                  ],
+                  "scale":{
+                      "size-factor":0.9
+                  },
+                  "type":"scatter",
+                  "series":[
+                    {
+                          "values":[[0,270],
+                          [1,270],
+                          [2,270],
+                          [3,270],
+                          [4,270],
+                          [5,270],
+                          [6,270],
+                          [7,270],
+                          [8,270],
+                          [9,270],
+                          [10,270],
+                          [11,270],
+                          [12,270]]
+                      },
+                      {
+                          "values":[[0,170],
+                          [1,170],
+                          [2,170],
+                          [3,170],
+                          [4,170],
+                          [5,170],
+                          [6,170],
+                          [7,170],
+                          [8,170],
+                          [9,170],
+                          [10,170],
+                          [11,170],
+                          [12,170]]
+                      },
+                      {
+                          "values":[[0,68],
+                          [1,68],
+                          [2,68],
+                          [3,68],
+                          [4,68],
+                          [5,68],
+                          [6,68],
+                          [7,68],
+                          [8,68],
+                          [9,68],
+                          [10,68],
+                          [11,68],
+                          [12,68]]
+                      }
+                  ]
+              }
+          ]
+      };
+
+      zingchart.render({
+      	id : 'windChart',
+      	data : windConfig,
+      	height : "300px",
+      	width: "100%"
+      });
+
+      </script>
+    </section>
+</div>
+</section>
+
 {% endblock %}

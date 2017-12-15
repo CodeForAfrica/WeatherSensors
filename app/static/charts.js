@@ -1,5 +1,7 @@
 var myConfig17 = {
   "type":"gauge",
+  "background-color":"transparent",
+  "bgcolor": "transparent",
   "scale-r":{
     "aperture":200,
     "values":"0:100:20",
@@ -35,7 +37,7 @@ var myConfig17 = {
     },
     "guide":{
       "background-color":"#66CCFF #FFCCFF",
-      "alpha":0.2
+      "alpha":0.5
     },
     "tick":{
       "line-color":"#66CCFF",
@@ -83,6 +85,6 @@ var myConfig17 = {
 zingchart.render({
 	id : 'windspeed',
 	data : myConfig17,
-	height : "100%",
+	height : "350px",
 	width: "100%"
 });

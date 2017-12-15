@@ -8,7 +8,19 @@ import services
 
 @app.route('/')
 def index():
-    return render_template("index.html")
+    #choosen default station for home, BRT
+    station = services.get_station("TA00273")
+    timeseries=station["timeseries"]
+    lasttimeMeasured = sorted(timeseries["temperature"].keys())[-1]
+    lastMeasuredTemp = timeseries["temperature"][lasttimeMeasured]
+    lastMeasuredPrecip = timeseries["precipitation"][lasttimeMeasured]
+    lastMeasuredWindSpeed = timeseries["windspeed"][lasttimeMeasured]
+    lastMeasuredWindDirection = timeseries["winddirection"][lasttimeMeasured]
+    lastMeasuredPressure = timeseries["atmosphericpressure"][lasttimeMeasured]
+    lastMeasuredHumidity = timeseries["relativehumidity"][lasttimeMeasured]
+    print lastMeasuredTemp
+    print lastMeasuredWindDirection
+    return render_template("index.html", station=station["station"], timeseries=timeseries, lastMeasuredTemp = lastMeasuredTemp, lastMeasuredPrecip = lastMeasuredPrecip, lastMeasuredWindSpeed=lastMeasuredWindSpeed, lastMeasuredWindDirection=lastMeasuredWindDirection, lastMeasuredPressure=lastMeasuredPressure, lastMeasuredHumidity=lastMeasuredHumidity)
 
 @app.route('/stations')
 def stations():
@@ -19,7 +31,7 @@ def stations():
         markers.append(station["location"])
     stationsMap = Map(
         identifier="section-map",
-        lat=-6.3690,
+        last=-6.3690,
         lng=38.8888,
         zoom = 7,
         style="width:100%; height: 700px",
