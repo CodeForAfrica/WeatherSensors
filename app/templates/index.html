@@ -21,6 +21,12 @@
       <div id='temperature'></div>
     </div>
     <div class="col-md-4 col-xs-4">
+      <div class="compass">
+        <div class="direction">
+          <p><span> {{ lastMeasuredWindDirection }} m/s</span></p>
+        </div>
+        <div class="arrow ne"></div>
+      </div>
       <div id='windGConfig'></div>
       <script>
       var direction = [];
@@ -32,31 +38,34 @@
         "background-color":"transparent",
         "bgcolor": "transparent",
         "scale":{
-          "size-factor":0.7
+          "size-factor":1
         },
-        "scale-2":{
-          "size-factor":1.1
-        },
+        // "scale-2":{
+        //   "size-factor":1.1
+        // },
         "scale-r":{ //Default Scale
           "aperture":200,
           "values":"0:50:10",
           "center":{
             "size":5,
-       	   // "background-color":"#66CCFF #FFCCFF",
+       	    "background-color":"#66CCFF #FFCCFF",
        	    "border-color":"none"
           }
         },
-        "scale-r-2":{ //Additional Scale
-          "aperture":360,
-          "values":"360:0:-20",
-          "center":{
-            "size":7,
-       	   // "background-color":"#66CCFF #FFCCFF",
-       	    "border-color":"none"
-          },
-          "guide":{
-            "alpha":0 //Make sure your larger scale's background is set to transparent.
-          }
+        // "scale-r-2":{ //Additional Scale
+        //   "aperture":360,
+        //   "values":"360:0:-20",
+        //   "center":{
+        //     "size":7,
+       	//    // "background-color":"#66CCFF #FFCCFF",
+       	//     "border-color":"none"
+        //   },
+        //   "guide":{
+        //     "alpha":0 //Make sure your larger scale's background is set to transparent.
+        //   }
+        // },
+        "ring":{
+          "size":10
         },
         "series":[
           {
@@ -64,13 +73,13 @@
             //"scales":"scale,scale-r", //Specify which scale your data should plot to.
             "csize":"5%",
             "size":"90%"
-          },
-          {
-            "values":direction,
-            "scales":"scale-2,scale-r-2", //Specify which scale your data should plot to.
-            "csize":"5%",
-            "size":"90%"
           }
+          // {
+          //   "values":direction,
+          //   "scales":"scale-2,scale-r-2", //Specify which scale your data should plot to.
+          //   "csize":"5%",
+          //   "size":"90%"
+          // }
         ]
       };
 
@@ -99,11 +108,55 @@
     <section id="content1">
       <div id="tempGraph">
       </div>
-      <script>
+      <script type=text/javascript>
+      timeList = {{ sortedTimeSeries|tojson|safe }};
+      temp = {{ timeseries|tojson|safe }};
+      values=[];
+      for (var i=0; i < timeList.length; i++) {
+        values.push(temp.temperature[timeList[i]]);
+      }
+      console.log(temp.temperature);
       var myConfig = {
         "type": "line",
-        "plot":{"aspect":"segmented"},
-        "series": [{"values":[20,40,25,50,15,45,33,34]}]
+        "utc": true,
+         "scaleX":{
+           "minValue": '{{ startTime }}',
+           "step": 3600000,
+            "transform":{
+             "type": 'date',
+             "all": '%D, %d %M %Y<br>%h:%i %A',
+             "itemsOverlap": true
+           },
+           "item": {
+             "fontSize": 10
+           },
+           "maxItems": 13,
+           "guide": {
+             "alpha": 1,
+             "lineWidth": "2px"
+           }
+         },
+         "scale-y":{
+           "values":"20:40:2",
+           "format":"%v\u00B0C",
+         },
+        "plot":{
+          "tooltip": {
+              "visible": false
+            }
+        },
+        "series": [
+          {
+          "values":values,
+          "lineColor": '#03A9F4',
+          "lineWidth":0.5,
+          "marker": {
+            "backgroundColor": '#03A9F4',
+            "borderWidth": 0,
+            "size": 2
+          }
+        }
+      ]
       };
 
 zingchart.render({

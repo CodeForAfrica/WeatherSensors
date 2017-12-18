@@ -2,6 +2,9 @@ var myConfig17 = {
   "type":"gauge",
   "background-color":"transparent",
   "bgcolor": "transparent",
+  "scale":{
+    "size-factor":1
+  },
   "scale-r":{
     "aperture":200,
     "values":"0:100:20",
@@ -77,6 +80,8 @@ var myConfig17 = {
   "series":[
     {
       "values":[87],
+      "csize":"5%",
+      "size":"90%",
       "text":"Very Great!"
     }
   ]

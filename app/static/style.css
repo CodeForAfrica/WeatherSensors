@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:400,600,700");
+@import url("https://fonts.googleapis.com/css?family=Dosis:200,400,500,600");
 @import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
 *, *:before, *:after {
   margin: 0;
@@ -93,7 +94,7 @@ body {
 .city-data {
   position: relative;
   display: block;
-  height: 550px;
+  height: 450px;
   background: url(img/bg-city-data-page.jpg) bottom center no-repeat;
   background-size: cover;
   border-bottom: 3px solid #EEE;
@@ -248,3 +249,90 @@ input:checked + label {
     padding: 15px;
   }
 }
+.compass {
+  display: block;
+  width: 60px;
+  height: 60px;
+  border-radius: 100%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, .85);
+  position: relative;
+  font-family: 'Dosis';
+  color: #000;
+  text-shadow: 1px 1px 1px white;
+}
+.compass:before {
+    font-weight: bold;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    content: "N";
+    font-size: 12px;
+    top: -2px;
+}
+.direction {
+  height: 100%;
+  width: 100%;
+  display: block;
+  background: #f2f6f5;
+  background: -moz-linear-gradient(top, #f2f6f5 0%, #cbd5d6 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f2f6f5), color-stop(100%, #cbd5d6));
+  background: -webkit-linear-gradient(top, #f2f6f5 0%, #cbd5d6 100%);
+  background: -o-linear-gradient(top, #f2f6f5 0%, #cbd5d6 100%);
+  border-radius: 100%;
+}
+.direction p {
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 90%;
+    line-height: 40px;
+    display: block;
+    font-size: 18px;
+    font-weight: bold;
+}
+.direction p span {
+    display: block;
+    line-height: normal;
+    margin-top: -24px;
+    font-size: 11px;
+    padding-top: 20px;
+    font-weight: normal;
+}
+.arrow {
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: absolute;
+    top: 0;
+  }
+.arrow:after {
+    content: "";
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 10px solid red;
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    margin-left: -5px;
+    z-index: 99;
+  }
+  .arrow:after .nne { transform: rotate(22.5deg); }
+  .arrow:after .ne { transform: rotate(45deg); }
+  .arrow .ene { transform: rotate(67.5deg); }
+  .arrow .e { transform: rotate(90deg); }
+  .arrow .ese { transform: rotate(112.5deg); }
+  .arrow .se { transform: rotate(135deg); }
+  .arrow .sse { transform: rotate(157.5deg); }
+  .arrow .s { transform: rotate(180deg); }
+  .arrow .ssw { transform: rotate(202.5deg); }
+  .arrow .sw { transform: rotate(-135deg); }
+  .arrow .wsw { transform: rotate(-114.5deg); }
+  .arrow .w { transform: rotate(-90deg); }
+  .arrow .wnw { transform: rotate(-69.5deg); }
+  .arrow .nw { transform: rotate(-45deg); }
+  .arrow .nnw { transform: rotate(-24.5deg);}
