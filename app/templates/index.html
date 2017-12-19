@@ -13,26 +13,137 @@
     <a href="/stations" class="other-station"><i></i>Find other stations</a>
   </div>
   <div class="row">
+    <div class="weather-container">
     <div class="col-md-4 col-xs-4">
-      <div id='windspeed'></div>
-        <script src="{{url_for('static', filename='charts.js')}}"></script>
+      <script type="text/javascript">
+        FusionCharts.ready(function(){
+          var fusioncharts = new FusionCharts({
+          type: 'thermometer',
+          renderAt: 'chart-container',
+          id: 'myThm',
+          width: '200',
+          height: '200',
+          dataFormat: 'json',
+          dataSource: {
+              "chart": {
+                  "caption": "Temperature Monitor",
+                  "subcaption": " Central cold store",
+                  "lowerLimit": "-10",
+                  "upperLimit": "0",
+
+                  "decimals": "1",
+                  "numberSuffix": "°C",
+                  "showhovereffect": "1",
+                  "thmFillColor": "#008ee4",
+                  "showGaugeBorder": "1",
+                  "gaugeBorderColor": "#008ee4",
+                  "gaugeBorderThickness": "2",
+                  "gaugeBorderAlpha": "30",
+                  "thmOriginX": "100",
+                  "chartBottomMargin": "20",
+                  "valueFontColor": "#000000",
+                  "theme": "fint"
+              },
+              "value": "-6",
+              //All annotations are grouped under this element
+              "annotations": {
+                  "showbelow": "0",
+                  "groups": [{
+                      //Each group needs a unique ID
+                      "id": "indicator",
+                      "items": [
+                          //Showing Annotation
+                          {
+                              "id": "background",
+                              //Rectangle item
+                              "type": "rectangle",
+                              "alpha": "50",
+                              "fillColor": "#AABBCC",
+                              "x": "$gaugeEndX-40",
+                              "tox": "$gaugeEndX",
+                              "y": "$gaugeEndY+54",
+                              "toy": "$gaugeEndY+72"
+                          }
+                      ]
+                  }]
+
+              },
+          },
+      }
+      );
+
+  var fusionchart = new FusionCharts({
+    type: 'cylinder',
+    dataFormat: 'json',
+    id: 'fuelMeter-1',
+    renderAt: 'chart-container2',
+    width: '250',
+    height: '200',
+    dataSource: {
+        "chart": {
+            "theme": "fint",
+            "caption": "Diesel Level in Generator",
+            "subcaption": "Bakersfield Central",
+            "lowerLimit": "0",
+            "upperLimit": "120",
+            "lowerLimitDisplay": "Empty",
+            "upperLimitDisplay": "Full",
+            "numberSuffix": " ltrs",
+            "showValue": "1",
+            "chartBottomMargin": "45",
+            "showValue": "0"
+        },
+        "value": "110",
+        "annotations": {
+            "origw": "400",
+            "origh": "190",
+            "autoscale": "1",
+            "groups": [{
+                "id": "range",
+                "items": [{
+                    "id": "rangeBg",
+                    "type": "rectangle",
+                    "x": "$canvasCenterX-45",
+                    "y": "$chartEndY-30",
+                    "tox": "$canvasCenterX +45",
+                    "toy": "$chartEndY-75",
+                    "fillcolor": "#6caa03"
+                }, {
+                    "id": "rangeText",
+                    "type": "Text",
+                    "fontSize": "11",
+                    "fillcolor": "#333333",
+                    "text": "80 ltrs",
+                    "x": "$chartCenterX-45",
+                    "y": "$chartEndY-50"
+                }]
+            }]
+        }
+
+    }
+});
+          fusioncharts.render();
+          fusionchart.render();
+      });
+      </script>
+      <div id="chart-container"></div>
+      <!-- <div id='windspeed'></div>
+        <script src="{{url_for('static', filename='charts.js')}}"></script> -->
     </div>
     <div class="col-md-4 col-xs-4">
-      <div id='temperature'></div>
+      <div id="chart-container2"></div>
     </div>
     <div class="col-md-4 col-xs-4">
       <div class="compass">
         <div class="direction">
-          <p><span> {{ lastMeasuredWindDirection }} m/s</span></p>
+          <p><span> {{ lastMeasuredWindDirection }} &deg;</span></p>
         </div>
-        <div class="arrow ne"></div>
+        <div class="arrow {{ winddirectionClass }}"></div>
       </div>
       <div id='windGConfig'></div>
       <script>
-      var direction = [];
-      direction[0] = '{{ lastMeasuredWindDirection }}';
       var speed = [];
-      speed[0] = '{{ lastMeasuredWindSpeed }}';
+      speed[0] = {{ lastMeasuredWindSpeed|tojson|safe }};
       var windGConfig = {
         "type":"gauge",
         "background-color":"transparent",
@@ -40,46 +151,20 @@
         "scale":{
           "size-factor":1
         },
-        // "scale-2":{
-        //   "size-factor":1.1
-        // },
         "scale-r":{ //Default Scale
           "aperture":200,
-          "values":"0:50:10",
+          "values":"0:5:1",
           "center":{
-            "size":5,
+            "size": 5,
        	    "background-color":"#66CCFF #FFCCFF",
        	    "border-color":"none"
           }
         },
-        // "scale-r-2":{ //Additional Scale
-        //   "aperture":360,
-        //   "values":"360:0:-20",
-        //   "center":{
-        //     "size":7,
-       	//    // "background-color":"#66CCFF #FFCCFF",
-       	//     "border-color":"none"
-        //   },
-        //   "guide":{
-        //     "alpha":0 //Make sure your larger scale's background is set to transparent.
-        //   }
-        // },
-        "ring":{
-          "size":10
-        },
         "series":[
           {
             "values":speed,
-            //"scales":"scale,scale-r", //Specify which scale your data should plot to.
-            "csize":"5%",
-            "size":"90%"
+            "text":"m/s"
           }
-          // {
-          //   "values":direction,
-          //   "scales":"scale-2,scale-r-2", //Specify which scale your data should plot to.
-          //   "csize":"5%",
-          //   "size":"90%"
-          // }
         ]
       };
 
@@ -91,10 +176,12 @@
       });
       </script>
     </div>
+  </div>
 </div>
 </section>
   <section="timeseries">
   <div class="col-md-12">
+    <div style="padding: 5 30px">
 
     <input id="tab1" type="radio" name="tabs" checked>
     <label for="tab1">Temperature</label>
@@ -117,14 +204,14 @@
       }
       console.log(temp.temperature);
       var myConfig = {
-        "type": "line",
+        "type": "area",
         "utc": true,
          "scaleX":{
            "minValue": '{{ startTime }}',
            "step": 3600000,
             "transform":{
              "type": 'date',
-             "all": '%D, %d %M %Y<br>%h:%i %A',
+             "all": '%D, %d %M<br>%h:%i %A',
              "itemsOverlap": true
            },
            "item": {
@@ -137,18 +224,22 @@
            }
          },
          "scale-y":{
-           "values":"20:40:2",
-           "format":"%v\u00B0C",
+           "values":"20:35:2",
+           "format":"%v \u00B0C",
+           "guide":{
+             "visible":false
+           }
          },
         "plot":{
           "tooltip": {
-              "visible": false
+              "visible": true
             }
         },
         "series": [
           {
-          "values":values,
+          "values": values,
           "lineColor": '#03A9F4',
+          "backgroundColor":"#03A9F4",
           "lineWidth":0.5,
           "marker": {
             "backgroundColor": '#03A9F4',
@@ -159,12 +250,12 @@
       ]
       };
 
-zingchart.render({
-	id : 'tempGraph',
-	data : myConfig,
-	height: "200px",
-	width: "100%"
-});
+      zingchart.render({
+      	id : 'tempGraph',
+      	data : myConfig,
+      	height: "200px",
+      	width: "100%"
+      });
       </script>
 
     </section>
@@ -172,32 +263,53 @@ zingchart.render({
     <section id="content2">
       <div id="precipitationChart"></div>
       <script>
+      timeList = {{ sortedTimeSeries|tojson|safe }};
+      temp = {{ timeseries|tojson|safe }};
+      values=[];
+      for (var i=0; i < timeList.length; i++) {
+        values.push(temp.precipitation[timeList[i]]);
+      }
       var myConfig = {
-  "type":"heatmap",
-  "plot":{
-    "aspect":"vertical"
-  },
-  "plotarea":{
-    "adjust-layout":"auto"
-  },
-  "scale-y":{
-    "labels":["0.7 and 1","0 and 0.3","0.2 and 1<br>(default)"]
-  },
-  "series":[
-    {
-      "values": [59,15,5,30,60,99,28,33,34,51,12,30,15,39,15,71,23,51,29,20],
-      "min-ratio":0,
-      "max-ratio":0.3
-    }
-  ]
-};
+        "type":"heatmap",
+        "plot":{
+          "aspect":"vertical"
+        },
+        "plotarea":{
+          "adjust-layout":"auto"
+        },
+        "utc": true,
+         "scaleX":{
+           "minValue": '{{ startTime }}',
+           "step": 3600000,
+            "transform":{
+             "type": 'date',
+             "all": '%D, %d %M<br>%h:%i %A',
+             "itemsOverlap": true
+           },
+           "item": {
+             "fontSize": 10
+           },
+           "maxItems": 13,
+           "guide": {
+             "alpha": 1,
+             "lineWidth": "2px"
+           }
+         },
+        "series":[
+          {
+            "values": values
+            // "min-ratio":0,
+            // "max-ratio":0.3
+          }
+        ]
+      };
 
-zingchart.render({
-  id : 'precipitationChart',
-  data : myConfig,
-  height : "100px",
-  width: "100%"
-});
+      zingchart.render({
+        id : 'precipitationChart',
+        data : myConfig,
+        height : "100px",
+        width: "100%"
+      });
       </script>
     </section>
 
@@ -300,6 +412,7 @@ zingchart.render({
 
       </script>
     </section>
+</div>
 </div>
 </section>
 

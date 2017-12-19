@@ -39,7 +39,6 @@ var myConfig17 = {
       ]
     },
     "guide":{
-      "background-color":"#66CCFF #FFCCFF",
       "alpha":0.5
     },
     "tick":{

@@ -3,9 +3,9 @@
 {% extends "base.html" %}
 {% block title %}Home{% endblock %}
 {% block body %}
-<div class="jumbotron">
-  <h3>Weather Stations</h1>
-  <div>
+<div>
+  <div class="col-md-8 offset-1">
+    <h3>Weather Stations</h1>
     {{stationsMap.html}}
     {{stationsMap.js}}
   </div>

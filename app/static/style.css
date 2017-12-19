@@ -6,6 +6,9 @@
   padding: 0;
   box-sizing: border-box;
 }
+html {
+  height:100.1%;
+}
 header {
     position: absolute;
     top: 0;
@@ -164,6 +167,32 @@ span.tag {
     text-transform: uppercase;
     color: rgba(255,255,255,.8);
 }
+.weather-container {
+    display: flex;
+    list-style: none;
+    width: 960px;
+    height: 204px;
+    overflow: hidden;
+    margin: 5px auto;
+    background: 0;
+}
+@media screen and  (max-width: 768px) {
+  .weather-container {
+    display: inline;
+    width: 300px;
+    height: 200px;
+    background-color: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -moz-font-smoothing: antialiased;
+    -o-font-smoothing: antialiased;
+    -ms-font-smoothing: antialiased;
+    font-family: arial,sans-serif;
+    overflow: hidden;
+  }
+
+}
 
 .timeseries {
   min-width: 320px;
@@ -177,6 +206,7 @@ section {
   display: none;
   padding: 20px 0 0;
   border-top: 1px solid #ddd;
+  font-family: Circular-Medium,sans-serif;
 }
 
 input {
@@ -186,10 +216,12 @@ input {
 label {
   display: inline-block;
   margin: 0 0 -1px;
-  padding: 15px 25px;
-  font-weight: 600;
+  padding: 10px 20px;
+  font-weight: 400;
+  font-size: 12px;
   text-align: center;
   color: #bbb;
+  font-family: Circular-Medium,sans-serif;
   border: 1px solid transparent;
 }
 
@@ -321,18 +353,18 @@ input:checked + label {
     margin-left: -5px;
     z-index: 99;
   }
-  .arrow:after .nne { transform: rotate(22.5deg); }
-  .arrow:after .ne { transform: rotate(45deg); }
-  .arrow .ene { transform: rotate(67.5deg); }
-  .arrow .e { transform: rotate(90deg); }
-  .arrow .ese { transform: rotate(112.5deg); }
-  .arrow .se { transform: rotate(135deg); }
-  .arrow .sse { transform: rotate(157.5deg); }
-  .arrow .s { transform: rotate(180deg); }
-  .arrow .ssw { transform: rotate(202.5deg); }
-  .arrow .sw { transform: rotate(-135deg); }
-  .arrow .wsw { transform: rotate(-114.5deg); }
-  .arrow .w { transform: rotate(-90deg); }
-  .arrow .wnw { transform: rotate(-69.5deg); }
-  .arrow .nw { transform: rotate(-45deg); }
-  .arrow .nnw { transform: rotate(-24.5deg);}
+.nne { transform: rotate(22.5deg); }
+.ne { transform: rotate(45deg); }
+.ene { transform: rotate(67.5deg); }
+ .e { transform: rotate(90deg); }
+.ese { transform: rotate(112.5deg); }
+.se { transform: rotate(135deg); }
+.sse { transform: rotate(157.5deg); }
+.s { transform: rotate(180deg); }
+.ssw { transform: rotate(202.5deg); }
+.sw { transform: rotate(-135deg); }
+.wsw { transform: rotate(-114.5deg); }
+.w { transform: rotate(-90deg); }
+.wnw { transform: rotate(-69.5deg); }
+.nw { transform: rotate(-45deg); }
+.nnw { transform: rotate(-24.5deg);}
