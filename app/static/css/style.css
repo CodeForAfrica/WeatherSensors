@@ -90,9 +90,10 @@ body {
   line-height: 1.5;
   color: #0a0a0a;
   background: #fefefe;
-  font: 14px/1 'Open Sans', sans-serif;
+  font: 15px/1 'Open Sans', sans-serif;
   -webkit-font-smoothing: antialiased;
 }
+
 
 .city-data {
   position: relative;
