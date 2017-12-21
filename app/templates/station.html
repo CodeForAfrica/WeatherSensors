@@ -6,6 +6,7 @@
   {% for station in stations %}
     <a class="dropdown-item" href="/station/{{ station["id"] }}">{{ station["name"] }}</a>
   {% endfor %}
+  {% endblock %}
 {% block body %}
 <main role="main">
   <section class="jumbotron text-center city-info">
