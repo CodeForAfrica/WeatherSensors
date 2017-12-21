@@ -1,4 +1,5 @@
 import urllib, urllib2, base64, json, datetime
+import logging
 from app import app
 
 basicAuthString = base64.encodestring('%s:%s' % (app.config['API_ID'], app.config['API_SECRET'])).replace('\n', '')
@@ -15,32 +16,30 @@ def apiRequest (url, params = {}):
 		return response.read()
 	except urllib2.HTTPError, err:
 		if err.code == 401:
-			print "Error: Invalid API credentials";
+			app.logger.HTTPError("Error: Invalid API credentials")
+			#print "Error: Invalid API credentials";
 		elif err.code == 404:
-			print "Error: The API endpoint is currently unavailable";
+			app.logger.HTTPError("Error: The API endpoint is currently unavailable")
+			#print "Error: The API endpoint is currently unavailable";
 		else:
 			print err
 		return {};
 
 def get_stations():
-# Request stations from API
-    response = apiRequest("https://tahmoapi.mybluemix.net/v1/stations")
-    decodedResponse	= json.loads(response)
-# Check if API responded with an error
+	# Request stations from API
+	response = apiRequest("https://tahmoapi.mybluemix.net/v1/stations")
+	decodedResponse	= json.loads(response)
 	if bool(decodedResponse):
-	    if(decodedResponse['status'] == 'error'):
-	    	print "Error:", decodedResponse['error']
-	        return {}
-	    # Check if API responded with success
-	    elif(decodedResponse['status'] == 'success'):
-	    	# Print the amount of stations that were retrieved in this API call
-	    	print "API call success:", len(decodedResponse['stations']), "stations retrieved"
-	        return decodedResponse['stations']
-	else:
-		return {}
-
-
-
+		if(decodedResponse['status'] == 'error'):
+			print "Error:", decodedResponse['error']
+			return {}
+			# Check if API responded with success
+		elif(decodedResponse['status'] == 'success'):
+			# Print the amount of stations that were retrieved in this API call
+			print "API call success:", len(decodedResponse['stations']), "stations retrieved"
+			return decodedResponse['stations']
+		else:
+			return {}
 def get_station(station_id):
 	# Request stations from API
 	startDate = datetime.datetime.strftime(datetime.datetime.utcnow()-datetime.timedelta(0.5),'%Y-%m-%dT%H:%M')

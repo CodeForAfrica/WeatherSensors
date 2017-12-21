@@ -320,6 +320,8 @@
               <div id="pressureGauge"></div>
               <script>
                   zingchart.THEME="classic";
+                  var pressure = [];
+                  pressure[0] = {{ lastMeasuredPressure|tojson|safe }};
                   var pressureConfig = {
                     type: "gauge",
                     backgroundColor: "transparent",
@@ -345,7 +347,7 @@
                    	  sizeFactor: 1.2
                    	},
                    	"scale-r-2":{
-                   	  values: "0:100:10",
+                   	  values: "0:300:50",
                    	  aperture: 220,
                       tick:{
                         lineWidth: 2,
@@ -392,10 +394,10 @@
                    	},
                   	series : [
                   		{
-                  			values : [50],
+                  			values : pressure,
                   			backgroundColor: "#F8B237",
                   			valueBox:{
-                  			  text: "%v",
+                  			  text: "%v kPa",
                   			  placement: "center",
                   			  offsetY: 40,
                   			  fontSize: 12,

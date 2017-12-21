@@ -7,6 +7,7 @@ from flask_googlemaps import Map
 import services
 import datetime, calendar
 import json
+import logging
 
 @app.route('/')
 def index():
