@@ -79,8 +79,8 @@
                         "visible":false
                       },
                       "item":{
-                        "font-color":"#024567",
-                        "font-size":13
+                        "font-color": "#515151",//"#024567",
+                        "font-size":12
                       }
                     },
                     "scale-y":{
@@ -164,9 +164,9 @@
                         "valueBox":{
                     			  "text": "%v m/s",
                     			  "placement": "center",
-                    			  "offsetY": 50,
+                    			  "offsetY": 45,
                     			  "fontSize": 12,
-                    			  "fontColor": "#000",
+                    			  "fontColor": "#515151",
                     			}
                       }
                     ]
@@ -193,12 +193,6 @@
                     y: 0,
                     height: "100%",
                     width: "80%",
-                    subtitle:{
-                      text: "mm",
-                      y: 100,
-                      fontSize: 12,
-                      bold: false
-                    },
                     scaleY:{
                       lineColor: "none",
                       values: "0:100:10",
@@ -297,10 +291,10 @@
                           visble: false
                         },
                         valueBox:{
-                          text: "%v",
+                          text: "%v mm",
                           placement: "bottom-out",
                           offsetY: 0,
-                          fontSize: 16,
+                          fontSize: 12,
                           fontColor: "#515151",
                         }
                       }
@@ -326,7 +320,7 @@
                     type: "gauge",
                     backgroundColor: "transparent",
                    	scaleR:{
-                   	 values: "0:10:1",
+                   	 values: "0:30:5",
                    	  aperture: 240,
                    	  tick:{
                    	    visible: false
@@ -399,7 +393,7 @@
                   			valueBox:{
                   			  text: "%v kPa",
                   			  placement: "center",
-                  			  offsetY: 40,
+                  			  offsetY: 60,
                   			  fontSize: 12,
                   			  fontColor: "#515151",
                   			}
