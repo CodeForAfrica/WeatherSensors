@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block dropdown %}
+  {% for station in stations %}
+    <a class="dropdown-item" href="/station/{{ station["id"] }}">{{ station["name"] }}</a>
+  {% endfor %}
+{% endblock %}
+{% block body %}
+<main>
+  <section class="jumbotron text-center city-info">
+    <div class="container">
+      <h2 class="jumbotron-heading">{{ message }}</h2>
+      <p>
+        <!-- <a href="/stations" class="btn btn-primary">Find Other Stations</a> -->
+        <a href="/" class="btn btn-secondary">Return Home</a>
+      </p>
+    </div>
+  </section>
+</main>
+{% endblock %}

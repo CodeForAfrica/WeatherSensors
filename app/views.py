@@ -11,6 +11,7 @@ import json
 @app.route('/')
 def index():
     #choosen default station for home, BRT
+    stations = services.get_stations()
     station = services.get_station("TA00273")
     timeseries=station['timeseries']
     sortedTimeSeries = sorted(timeseries["temperature"].keys())
@@ -26,6 +27,7 @@ def index():
     winddirectionClass = windArrow(lastMeasuredWindDirection)
     return render_template("index.html",
 startTime=startTime,
+stations=stations,
 station=station["station"],
 timeseries=timeseries,
 lastMeasuredTemp = lastMeasuredTemp,
@@ -37,7 +39,7 @@ lastMeasuredHumidity=lastMeasuredHumidity,
 sortedTimeSeries=sortedTimeSeries,
 winddirectionClass=winddirectionClass)
 
-@app.route('/stations')
+@app.route('/station')
 def stations():
     stations = services.get_stations()
     marker = []
@@ -50,17 +52,70 @@ def stations():
         lat=-6.3690,
         lng=38.8888,
         zoom = 7,
-        style="width:100%; height: 700px",
+        style="width:100%; height: 500px",
         markers=marker
     )
-    return render_template("stations.html", stationsMap=stationsMap)
+    return render_template("stations.html", stations=stations,stationsMap=stationsMap)
 
 
 @app.route('/station/<station_id>')
 def station(station_id):
+    stations = services.get_stations()
     station = services.get_station(station_id)
-    return render_template("station.html", station=station["station"], timeseries=station["timeseries"])
+    if bool(station['timeseries']):
+        timeseries=station['timeseries']
+        sortedTimeSeries = sorted(timeseries["temperature"].keys())
+        date = datetime.datetime.strptime(sortedTimeSeries[0], '%Y-%m-%dT%H:%M')
+        startTime = calendar.timegm(date.utctimetuple()) * 1000
+        lasttimeMeasured = sortedTimeSeries[-1]
+        lastMeasuredTemp = timeseries["temperature"][sorted(timeseries["temperature"].keys())[-1]]
+        lastMeasuredPrecip = timeseries["precipitation"][sorted(timeseries["precipitation"].keys())[-1]]
+        lastMeasuredWindSpeed = timeseries["windspeed"][sorted(timeseries["windspeed"].keys())[-1]]
+        lastMeasuredWindDirection = timeseries["winddirection"][sorted(timeseries["winddirection"].keys())[-1]]
+        lastMeasuredPressure = timeseries["atmosphericpressure"][sorted(timeseries["atmosphericpressure"].keys())[-1]]
+        lastMeasuredHumidity = timeseries["relativehumidity"][sorted(timeseries["relativehumidity"].keys())[-1]]
+        winddirectionClass = windArrow(lastMeasuredWindDirection)
+        return render_template("station.html",
+    startTime=startTime,
+    stations=stations,
+    station=station["station"],
+    timeseries=timeseries,
+    lastMeasuredTemp = lastMeasuredTemp,
+    lastMeasuredPrecip = lastMeasuredPrecip,
+    lastMeasuredWindSpeed=lastMeasuredWindSpeed,
+    lastMeasuredWindDirection=lastMeasuredWindDirection,
+    lastMeasuredPressure=lastMeasuredPressure,
+    lastMeasuredHumidity=lastMeasuredHumidity,
+    sortedTimeSeries=sortedTimeSeries,
+    winddirectionClass=winddirectionClass)
+    else:
+        station = station['station']
+        message = "Station " + station["name"] + " has no recorded timeseries"
+        return render_template('404.html', message=message, stations=stations), 404
 
+@app.errorhandler(404)
+def page_not_found(e):
+    stations = services.get_stations()
+    message = "Page not found"
+    return render_template('404.html', message=message, stations=stations), 404
+
+@app.errorhandler(403)
+def page_not_found(e):
+    stations = services.get_stations()
+    message = "Page is forbidden"
+    return render_template('404.html', message=message, stations=stations), 403
+
+@app.errorhandler(410)
+def page_not_found(e):
+    stations = services.get_stations()
+    message = "Page is gone"
+    return render_template('404.html', message=message, stations=stations), 410
+
+@app.errorhandler(500)
+def page_not_found(e):
+    stations = services.get_stations()
+    message = "Internal Error"
+    return render_template('404.html', message=message, stations=stations), 500
 
 def windArrow(winddirection):
     if winddirection >= 12 and winddirection < 33.5:

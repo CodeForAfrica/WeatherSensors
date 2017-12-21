@@ -16,27 +16,28 @@ def apiRequest (url, params = {}):
 	except urllib2.HTTPError, err:
 		if err.code == 401:
 			print "Error: Invalid API credentials";
-			quit()
 		elif err.code == 404:
 			print "Error: The API endpoint is currently unavailable";
-			quit()
 		else:
 			print err
-			quit()
+		return {};
 
 def get_stations():
 # Request stations from API
     response = apiRequest("https://tahmoapi.mybluemix.net/v1/stations")
     decodedResponse	= json.loads(response)
 # Check if API responded with an error
-    if(decodedResponse['status'] == 'error'):
-    	print "Error:", decodedResponse['error']
-        return {}
-    # Check if API responded with success
-    elif(decodedResponse['status'] == 'success'):
-    	# Print the amount of stations that were retrieved in this API call
-    	print "API call success:", len(decodedResponse['stations']), "stations retrieved"
-        return decodedResponse['stations']
+	if bool(decodedResponse):
+	    if(decodedResponse['status'] == 'error'):
+	    	print "Error:", decodedResponse['error']
+	        return {}
+	    # Check if API responded with success
+	    elif(decodedResponse['status'] == 'success'):
+	    	# Print the amount of stations that were retrieved in this API call
+	    	print "API call success:", len(decodedResponse['stations']), "stations retrieved"
+	        return decodedResponse['stations']
+	else:
+		return {}
 
 
 
@@ -46,13 +47,16 @@ def get_station(station_id):
 	response = apiRequest("https://tahmoapi.mybluemix.net/v1/timeseries/"+station_id+ "/hourly", { 'startDate': startDate})
 	decodedResponse	= json.loads(response)
 	# Check if API responded with an error
-	if(decodedResponse['status'] == 'error'):
-		print "Error:", decodedResponse['error']
+	if bool(decodedResponse):
+		if(decodedResponse['status'] == 'error'):
+			print "Error:", decodedResponse['error']
+			return {}
+		# Check if API responded with success
+		elif(decodedResponse['status'] == 'success'):
+			print "API call success, stations retrieved"
+			return decodedResponse
+	else:
 		return {}
-	# Check if API responded with success
-	elif(decodedResponse['status'] == 'success'):
-		print "API call success, stations retrieved"
-		return decodedResponse
 
 
 def get_timeseries(station_id, startDate, endDate):
@@ -64,6 +68,7 @@ def get_timeseries(station_id, startDate, endDate):
     response = apiRequest("https://tahmoapi.mybluemix.net/v1/timeseries/" + stationId + "/hourly", { 'startDate': startDate, 'endDate' : endDate })
     decodedResponse	= json.loads(response)
     # Check if API responded with an error
+
     if(decodedResponse['status'] == 'error'):
     	print "Error:", decodedResponse['error']
     # Check if API responded with success

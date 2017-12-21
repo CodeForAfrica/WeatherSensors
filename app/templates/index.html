@@ -2,12 +2,17 @@
 
 {% extends "base.html" %}
 {% block title %}Home{% endblock %}
+{% block dropdown %}
+  {% for station in stations %}
+    <a class="dropdown-item" href="/station/{{ station["id"] }}">{{ station["name"] }}</a>
+  {% endfor %}
+{% endblock %}
 {% block body %}
   <main role="main">
     <section class="jumbotron text-center city-info">
       <div class="container">
         <h1 class="jumbotron-heading">Weather Stations for Tanzania</h1>
-        <p class="lead text-muted">BRT, Dar-es-salaam</p>
+        <p class="lead text-muted"> {{ station["name"] }}, Dar-es-salaam</p>
         <p>
           <!-- <a href="/stations" class="btn btn-primary">Find Other Stations</a> -->
           <!-- <a href="#" class="btn btn-secondary">Secondary action</a> -->
@@ -20,25 +25,27 @@
 
         <div class="row">
           <div class="col-md-12 col-lg-12">
-            <div class="card col-lg-4 col-md-4 col-sm-12">
+            <div class="card col-lg-3 col-md-3 col-sm-12">
 
               <p class="card-text">TEMPERATURE</p>
               <div id="temperatureGauge"></div>
               <script>
                 var temp = {{ lastMeasuredTemp|tojson|safe }};
+                var scaleFX = [];
                 var scaleFY = [];
                 scaleFY[0] = temp;
+                scaleFX[0] = temp + '\260' +"C";
+              //  "backgroundImage":"//demos.zingchart.com/view/7K22ESPL/sunny-sky.jpg",
+              //  "background-fit":'xy',
                 var myTempConfig = {
                     "type": "heatmap",
-                    "backgroundImage":"//demos.zingchart.com/view/7K22ESPL/sunny-sky.jpg",
-                    "background-fit":'xy',
                     "plot":{
                       "tooltip":{
-                        "text":"It is %y &deg; in %kl!",
+                        "text":"It is %kl in Dar-es-salaam!",
                         "background-color":"white",
                         "alpha":0.9,
                         "font-family":"Georgia",
-                        "font-color":"#006699",
+                        "font-color":"#000",
                         "font-size":13
                       },
                       "aspect":"none",
@@ -46,15 +53,15 @@
                       "background-repeat":false,
                       "rules":[
                         {
-                          "rule":"%v == 1",
+                          "rule":"%v >= 27",
                           "background-image":"//www.zingchart.com/package/examples/images/sunny.png"
                         },
                         {
-                          "rule":"%v == 2",
+                          "rule":"%v >= 19 && %v <= 26",
                           "background-image":"//www.zingchart.com/package/examples/images/partly-cloudy.png"
                         },
                         {
-                          "rule":"%v == 3",
+                          "rule":"%v <= 18",
                           "background-image":"//www.zingchart.com/package/examples/images/cloudy.png"
                         }
                       ],
@@ -63,7 +70,7 @@
                       }
                     },
                     "scale-x":{
-                      "labels":["Dar-es-salaam"],
+                      "labels":scaleFX,
                       "line-color":"none",
                       "guide":{
                         "visible":false
@@ -92,7 +99,7 @@
                     },
                     "series": [
                       {
-                        "values": [1],
+                        "values": scaleFY,
                         "data-weather":["sunny"]
                       },
                     ]
@@ -101,15 +108,15 @@
                     zingchart.render({
                     id : 'temperatureGauge',
                     data : myTempConfig,
-                    height: "250px",
+                    height: "220px",
                     width: "100%"
                     });
               </script>
             </div>
-            <div class="card col-lg-4 col-md-4 col-sm-12">
+            <div class="card col-lg-3 col-md-3 col-sm-12">
               <p class="card-text">WIND SPEED | WIND DIRECTION</p>
               <div class="chart">
-                <div class="" style="height: 40px; width: 100%; padding: 5px 0; font-size: 12px; color: #000;">
+                <div class="" style="height: 30px; width: 100%; padding: 5px 0; font-size: 12px; color: #000;">
                   Avg Speed: 3.5m/s
 
                 <div class="compass">
@@ -128,7 +135,7 @@
                     "background-color":"transparent",
                     "bgcolor": "transparent",
                     "scale":{
-                      "size-factor":0.8
+                      "size-factor":1
                     },
                     "scale-r":{ //Default Scale
                       "aperture":200,
@@ -138,11 +145,29 @@
                    	    "background-color":"#66CCFF #FFCCFF",
                    	    "border-color":"none"
                       }
+                      // "tick":{
+                      //   "line-width":1,
+                      //   "line-color":"black",
+                      //   "size":10
+                      // },
+                      // "minor-ticks":4,
+                      // "minor-tick":{
+                      //   "line-color":"black",
+                      //   "visible":true,
+                      //   "size":6,
+                      //   "placement":"inner"
+                      // },
                     },
                     "series":[
                       {
                         "values":speed,
-                        "text":"m/s"
+                        "valueBox":{
+                    			  "text": "%v m/s",
+                    			  "placement": "center",
+                    			  "offsetY": 50,
+                    			  "fontSize": 12,
+                    			  "fontColor": "#000",
+                    			}
                       }
                     ]
                   };
@@ -150,25 +175,27 @@
                   zingchart.render({
                   	id : 'windGConfig',
                   	data : windGConfig,
-                  	height : "250px",
+                  	height : "190px",
                   	width: "100%",
                   });
                   </script>
               </div>
             </div>
-            <div class="card col-lg-4 col-md-4 col-sm-12">
+            <div class="card col-lg-3 col-md-3 col-sm-12">
               <p class="card-text">PRECIPITATION</p>
               <div id="precipitationGauge"></div>
               <script>
+                var precip = [];
+                precip[0] = {{ lastMeasuredPrecip|tojson|safe }};
                 var precipitationConfig = {
                     type:"bar",
-                    x: "30%",
+                    x: "10%",
                     y: 0,
                     height: "100%",
-                    width: "60%",
+                    width: "80%",
                     subtitle:{
                       text: "mm",
-                      y: 0,
+                      y: 100,
                       fontSize: 12,
                       bold: false
                     },
@@ -179,15 +206,15 @@
                         visible: false
                       },
                       tick:{
-                        margin: 3,
-                        lineWidth: 4,
-                        size: 15,
+                        margin: 1,
+                        lineWidth: 1,
+                        size: 10,
                         lineColor: "#5F5F5F",
                         placement: "outter",
                         rules:[
                           {
                             rule: "%i % 2 == 1",
-                            lineWidth: 2
+                            lineWidth: 1
                           }
                         ]
                       },
@@ -195,7 +222,7 @@
                       minorTick: {
                         lineColor: "#C1C1C1",
                         placement: "inner",
-                        size: 7
+                        size: 6
                       },
                       item:{
                         fontSize: 12,
@@ -262,7 +289,7 @@
                         }
                       },
                       {
-                        values: [80],
+                        values: precip,
                         backgroundColor: "#F8B237",
                         barWidth: "93%",
                         maxTrackers: 0,
@@ -282,25 +309,348 @@
                   zingchart.render({
                   id : 'precipitationGauge',
                   data : precipitationConfig,
-                  height: "250px",
+                  height: "220px",
                   width: "100%"
                   });
               </script>
             </div>
+
+            <div class="card col-lg-3 col-md-3 col-sm-12">
+              <p class="card-text">PRESSURE</p>
+              <div id="pressureGauge"></div>
+              <script>
+                  zingchart.THEME="classic";
+                  var pressureConfig = {
+                    type: "gauge",
+                    backgroundColor: "transparent",
+                   	scaleR:{
+                   	 values: "0:10:1",
+                   	  aperture: 240,
+                   	  tick:{
+                   	    visible: false
+                   	  },
+                   	  item:{
+                   	    visible: false
+                   	  },
+                   	  ring:{
+                        backgroundColor: "transparent",
+                   	   // backgroundColor: "#C1C1C1",
+                   	    size: 10
+                   	  },
+                   	  center:{
+                   	    visible: false
+                   	  }
+                   	},
+                   	scale:{
+                   	  sizeFactor: 1.2
+                   	},
+                   	"scale-r-2":{
+                   	  values: "0:100:10",
+                   	  aperture: 220,
+                      tick:{
+                        lineWidth: 2,
+                        size: 6,
+                        lineColor: "#5F5F5F",
+                        placement: "outter"
+                      },
+                      minorTicks: 4,
+                      minorTick: {
+                        lineColor: "#C1C1C1",
+                        placement: "inner",
+                        size: 6
+                      },
+                      ring:{
+                        visible: false
+                      },
+                      item:{
+                        offsetR: -1,
+                        fontSize: 12
+                      },
+                      center:{
+                   	    size: 5,
+                        backgroundColor: "transparent",
+                   	   // backgroundColor:"#BEBEBE",
+                   	   // borderWidth: 1,
+                   	   // borderColor: "#5F5F5F"
+                   	  },
+                   	  label:{
+                   	    text: "text"
+                   	  }
+                   	},
+                   	"scale-2":{
+                   	  sizeFactor: 0.7
+                   	},
+                   	plot:{
+                   	  size: "56%",
+                  		csize: "14%",
+                  		tooltip:{
+                  		  visible: false
+                  		}
+                   	},
+                   	plotarea:{
+                   	  marginBottom: "20%"
+                   	},
+                  	series : [
+                  		{
+                  			values : [50],
+                  			backgroundColor: "#F8B237",
+                  			valueBox:{
+                  			  text: "%v",
+                  			  placement: "center",
+                  			  offsetY: 40,
+                  			  fontSize: 12,
+                  			  fontColor: "#515151",
+                  			}
+
+                  		}
+                  	]
+                  };
+
+                zingchart.render({
+                id : 'pressureGauge',
+                data : pressureConfig,
+                height: "220px",
+                width: "100%"
+                });
+              </script>
+
+            </div>
           </div>
           <div class="col-md-12">
+            <section="timeseries">
+            <div class="col-md-12">
+              <div style="padding: 5 30px">
 
-            <div class="card col-lg-4 col-md-4 col-sm-12">
-              <p class="card-text">PRESSURE</p>
-            </div>
-            <div class="card col-lg-4 col-md-4 col-sm-12">
-              <p class="card-text">HUMIDITY</p>
-              <img data-src="holder.js/100px280?theme=thumb" alt="Card image cap">
-            </div>
-            <div class="card col-lg-4 col-md-4 col-sm-12">
-              <p class="card-text">RADIATION</p>
-              <img data-src="holder.js/100px280?theme=thumb" alt="Card image cap">
-            </div>
+              <input id="tab1" type="radio" name="tabs" checked>
+              <label for="tab1">Temperature</label>
+
+              <input id="tab2" type="radio" name="tabs">
+              <label for="tab2">Precipitation</label>
+
+              <input id="tab3" type="radio" name="tabs">
+              <label for="tab3">Wind Speed</label>
+
+              <section class="tabSection" id="content1">
+                <div id="tempGraph">
+                </div>
+                <script type=text/javascript>
+                timeList = {{ sortedTimeSeries|tojson|safe }};
+                temp = {{ timeseries|tojson|safe }};
+                values=[];
+                for (var i=0; i < timeList.length; i++) {
+                  values.push(temp.temperature[timeList[i]]);
+                }
+                console.log(temp.temperature);
+                var myConfig = {
+                  "type": "area",
+                  "utc": true,
+                   "scaleX":{
+                     "minValue": '{{ startTime }}',
+                     "step": 3600000,
+                      "transform":{
+                       "type": 'date',
+                       "all": '%D, %d %M<br>%h:%i %A',
+                       "itemsOverlap": true
+                     },
+                     "item": {
+                       "fontSize": 10
+                     },
+                     "maxItems": 13,
+                     "guide": {
+                       "visible": false
+                     }
+                   },
+                   "scale-y":{
+                     "values":"20:35:2",
+                     "format":"%v \u00B0C",
+                     "guide":{
+                       "visible":false
+                     }
+                   },
+                  "plot":{
+                    "tooltip": {
+                        "visible": true
+                      }
+                  },
+                  "series": [
+                    {
+                    "values": values,
+                    "lineColor": '#03A9F4',
+                    "backgroundColor":"#03A9F4",
+                    "lineWidth":0.5,
+                    "marker": {
+                      "backgroundColor": '#03A9F4',
+                      "borderWidth": 0,
+                      "size": 2
+                    }
+                  }
+                ]
+                };
+
+                zingchart.render({
+                	id : 'tempGraph',
+                	data : myConfig,
+                	height: "200px",
+                	width: "100%"
+                });
+                </script>
+
+              </section>
+
+              <section class="tabSection" id="content2">
+                <div id="precipitationChart"></div>
+                <script>
+                timeList = {{ sortedTimeSeries|tojson|safe }};
+                temp = {{ timeseries|tojson|safe }};
+                values=[];
+                for (var i=0; i < timeList.length; i++) {
+                  values.push(temp.precipitation[timeList[i]]);
+                }
+                var myConfig = {
+                  "type":"heatmap",
+                  "plot":{
+                    "aspect":"vertical"
+                  },
+                  "plotarea":{
+                    "adjust-layout":"auto"
+                  },
+                  "utc": true,
+                  "scaleY": {
+                    "visible": false
+                  },
+                   "scaleX":{
+                     "minValue": '{{ startTime }}',
+                     "step": 3600000,
+                      "transform":{
+                       "type": 'date',
+                       "all": '%D, %d %M<br>%h:%i %A',
+                       "itemsOverlap": true
+                     },
+                     "item": {
+                       "fontSize": 10
+                     },
+                     "maxItems": 13,
+                     "guide": {
+                       "visible": false
+                     }
+                   },
+                  "series":[
+                    {
+                      "values": values
+                      // "min-ratio":0,
+                      // "max-ratio":0.3
+                    }
+                  ]
+                };
+
+                zingchart.render({
+                  id : 'precipitationChart',
+                  data : myConfig,
+                  height : "100px",
+                  width: "100%"
+                });
+                </script>
+              </section>
+
+              <section class="tabSection" id="content3">
+                <div id="windChart"></div>
+                <script>
+                var windConfig = {
+                    "graphset":[
+                        {
+                            "scale-x":{
+                                "zooming":1
+                            },
+                            "arrows":[
+                                {
+                                    "from":{
+                                        "hook":"node:plot=1,index=1"
+                                    },
+                                    "to":{
+                                        "hook":"node:plot=1,index=2"
+                                    }
+                                },
+                              {
+                                    "from":{
+                                        "hook":"node:plot=1,index=2"
+                                    },
+                                    "to":{
+                                        "hook":"node:plot=1,index=3"
+                                    }
+                                },
+                              {
+                                    "from":{
+                                        "hook":"node:plot=1,index=4"
+                                    },
+                                    "to":{
+                                        "hook":"node:plot=0,index=3"
+                                    }
+                                }
+                            ],
+                            "scale":{
+                                "size-factor":0.9
+                            },
+                            "type":"scatter",
+                            "series":[
+                              {
+                                    "values":[[0,270],
+                                    [1,270],
+                                    [2,270],
+                                    [3,270],
+                                    [4,270],
+                                    [5,270],
+                                    [6,270],
+                                    [7,270],
+                                    [8,270],
+                                    [9,270],
+                                    [10,270],
+                                    [11,270],
+                                    [12,270]]
+                                },
+                                {
+                                    "values":[[0,170],
+                                    [1,170],
+                                    [2,170],
+                                    [3,170],
+                                    [4,170],
+                                    [5,170],
+                                    [6,170],
+                                    [7,170],
+                                    [8,170],
+                                    [9,170],
+                                    [10,170],
+                                    [11,170],
+                                    [12,170]]
+                                },
+                                {
+                                    "values":[[0,68],
+                                    [1,68],
+                                    [2,68],
+                                    [3,68],
+                                    [4,68],
+                                    [5,68],
+                                    [6,68],
+                                    [7,68],
+                                    [8,68],
+                                    [9,68],
+                                    [10,68],
+                                    [11,68],
+                                    [12,68]]
+                                }
+                            ]
+                        }
+                    ]
+                };
+
+                zingchart.render({
+                	id : 'windChart',
+                	data : windConfig,
+                	height : "300px",
+                	width: "100%"
+                });
+
+                </script>
+              </section>
           </div>
 
         </div>
@@ -374,7 +724,7 @@
     dataFormat: 'json',
     id: 'fuelMeter-1',
     renderAt: 'chart-container2',
-    width: '250',
+    width: '220',
     height: '200',
     dataSource: {
         "chart": {
