@@ -6,6 +6,7 @@
   {% for station in stations %}
     <a class="dropdown-item" href="/station/{{ station["id"] }}">{{ station["name"] }}</a>
   {% endfor %}
+{% endblock %}
 {% block body %}
 <div class="album">
   <div class="container">
