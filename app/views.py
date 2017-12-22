@@ -14,32 +14,54 @@ def index():
     #choosen default station for home, BRT
     stations = services.get_stations()
     station = services.get_station("TA00273")
-    timeseries=station['timeseries']
-    sortedTimeSeries = sorted(timeseries["temperature"].keys())
-    date = datetime.datetime.strptime(sortedTimeSeries[0], '%Y-%m-%dT%H:%M')
-    startTime = calendar.timegm(date.utctimetuple()) * 1000
-    lasttimeMeasured = sortedTimeSeries[-1]
-    lastMeasuredTemp = timeseries["temperature"][sorted(timeseries["temperature"].keys())[-1]]
-    lastMeasuredPrecip = timeseries["precipitation"][sorted(timeseries["precipitation"].keys())[-1]]
-    lastMeasuredWindSpeed = timeseries["windspeed"][sorted(timeseries["windspeed"].keys())[-1]]
-    lastMeasuredWindDirection = timeseries["winddirection"][sorted(timeseries["winddirection"].keys())[-1]]
-    lastMeasuredPressure = timeseries["atmosphericpressure"][sorted(timeseries["atmosphericpressure"].keys())[-1]]
-    lastMeasuredHumidity = timeseries["relativehumidity"][sorted(timeseries["relativehumidity"].keys())[-1]]
-    winddirectionClass = windArrow(lastMeasuredWindDirection)
-    return render_template("index.html",
-startTime=startTime,
-stations=stations,
-station=station["station"],
-timeseries=timeseries,
-lastMeasuredTemp = lastMeasuredTemp,
-lastMeasuredPrecip = lastMeasuredPrecip,
-lastMeasuredWindSpeed=lastMeasuredWindSpeed,
-lastMeasuredWindDirection=lastMeasuredWindDirection,
-lastMeasuredPressure=lastMeasuredPressure,
-lastMeasuredHumidity=lastMeasuredHumidity,
-sortedTimeSeries=sortedTimeSeries,
-winddirectionClass=winddirectionClass)
-
+    if bool(station['timeseries']):
+        timeseries=station['timeseries']
+        sortedTimeSeries = sorted(timeseries["temperature"].keys())
+        date = datetime.datetime.strptime(sortedTimeSeries[0], '%Y-%m-%dT%H:%M')
+        startTime = calendar.timegm(date.utctimetuple()) * 1000
+        lasttimeMeasured = sortedTimeSeries[-1]
+        if "temperature" in timeseries:
+            lastMeasuredTemp = timeseries["temperature"][sorted(timeseries["temperature"].keys())[-1]]
+        else:
+            lastMeasuredTemp = "No record"
+        if "precipitation" in timeseries:
+            lastMeasuredPrecip = timeseries["precipitation"][sorted(timeseries["precipitation"].keys())[-1]]
+        else:
+            lastMeasuredPrecip = "No record"
+        if "windspeed" in timeseries:
+            lastMeasuredWindSpeed = timeseries["windspeed"][sorted(timeseries["windspeed"].keys())[-1]]
+        else:
+            lastMeasuredWindSpeed = "No record"
+        if "winddirection" in timeseries:
+            lastMeasuredWindDirection = timeseries["winddirection"][sorted(timeseries["winddirection"].keys())[-1]]
+        else:
+            lastMeasuredWindDirection = "No record"
+        if "atmosphericpressure" in timeseries:
+            lastMeasuredPressure = timeseries["atmosphericpressure"][sorted(timeseries["atmosphericpressure"].keys())[-1]]
+        else:
+            lastMeasuredPressure = "No record"
+        if "relativehumidity" in timeseries:
+            lastMeasuredHumidity = timeseries["relativehumidity"][sorted(timeseries["relativehumidity"].keys())[-1]]
+        else:
+            lastMeasuredHumidity = "No record"
+        winddirectionClass = windArrow(lastMeasuredWindDirection)
+        return render_template("index.html",
+    startTime=startTime,
+    stations=stations,
+    station=station["station"],
+    timeseries=timeseries,
+    lastMeasuredTemp = lastMeasuredTemp,
+    lastMeasuredPrecip = lastMeasuredPrecip,
+    lastMeasuredWindSpeed=lastMeasuredWindSpeed,
+    lastMeasuredWindDirection=lastMeasuredWindDirection,
+    lastMeasuredPressure=lastMeasuredPressure,
+    lastMeasuredHumidity=lastMeasuredHumidity,
+    sortedTimeSeries=sortedTimeSeries,
+    winddirectionClass=winddirectionClass)
+    else:
+        station = station['station']
+        message = "Station " + station["name"] + " has no recorded timeseries"
+        return render_template('404.html', message=message, stations=stations), 404
 @app.route('/station')
 def stations():
     stations = services.get_stations()
@@ -69,12 +91,30 @@ def station(station_id):
         date = datetime.datetime.strptime(sortedTimeSeries[0], '%Y-%m-%dT%H:%M')
         startTime = calendar.timegm(date.utctimetuple()) * 1000
         lasttimeMeasured = sortedTimeSeries[-1]
-        lastMeasuredTemp = timeseries["temperature"][sorted(timeseries["temperature"].keys())[-1]]
-        lastMeasuredPrecip = timeseries["precipitation"][sorted(timeseries["precipitation"].keys())[-1]]
-        lastMeasuredWindSpeed = timeseries["windspeed"][sorted(timeseries["windspeed"].keys())[-1]]
-        lastMeasuredWindDirection = timeseries["winddirection"][sorted(timeseries["winddirection"].keys())[-1]]
-        lastMeasuredPressure = timeseries["atmosphericpressure"][sorted(timeseries["atmosphericpressure"].keys())[-1]]
-        lastMeasuredHumidity = timeseries["relativehumidity"][sorted(timeseries["relativehumidity"].keys())[-1]]
+        if "temperature" in timeseries:
+            lastMeasuredTemp = timeseries["temperature"][sorted(timeseries["temperature"].keys())[-1]]
+        else:
+            lastMeasuredTemp = "No record"
+        if "precipitation" in timeseries:
+            lastMeasuredPrecip = timeseries["precipitation"][sorted(timeseries["precipitation"].keys())[-1]]
+        else:
+            lastMeasuredPrecip = "No record"
+        if "windspeed" in timeseries:
+            lastMeasuredWindSpeed = timeseries["windspeed"][sorted(timeseries["windspeed"].keys())[-1]]
+        else:
+            lastMeasuredWindSpeed = "No record"
+        if "winddirection" in timeseries:
+            lastMeasuredWindDirection = timeseries["winddirection"][sorted(timeseries["winddirection"].keys())[-1]]
+        else:
+            lastMeasuredWindDirection = "No record"
+        if "atmosphericpressure" in timeseries:
+            lastMeasuredPressure = timeseries["atmosphericpressure"][sorted(timeseries["atmosphericpressure"].keys())[-1]]
+        else:
+            lastMeasuredPressure = "No record"
+        if "relativehumidity" in timeseries:
+            lastMeasuredHumidity = timeseries["relativehumidity"][sorted(timeseries["relativehumidity"].keys())[-1]]
+        else:
+            lastMeasuredHumidity = "No record"
         winddirectionClass = windArrow(lastMeasuredWindDirection)
         return render_template("station.html",
     startTime=startTime,
@@ -117,6 +157,12 @@ def page_not_found(e):
     stations = services.get_stations()
     message = "Internal Error"
     return render_template('404.html', message=message, stations=stations), 500
+
+@app.errorhandler(501)
+def page_not_found(e):
+    stations = services.get_stations()
+    message = "Internal Error"
+    return render_template('404.html', message=message, stations=stations), 501
 
 def windArrow(winddirection):
     if winddirection >= 12 and winddirection < 33.5:

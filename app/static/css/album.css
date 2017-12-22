@@ -36,8 +36,13 @@ a:hover {
 }
 
 .jumbotron-heading {
-  font-weight: 300;
+  font-weight: 600;
   font-size: 28px;
+  color: #fff;
+}
+
+.lead {
+  color: #fff;
 }
 
 .jumbotron .container {
@@ -45,7 +50,8 @@ a:hover {
 }
 
 .city-info {
-  background: url(../img/bg-city-data-page.jpg) bottom center no-repeat;
+  background: url(../img/dar-es-salaam.jpg) bottom center no-repeat;
+  background-position: center;
   background-size: cover;
 }
 

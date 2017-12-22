@@ -16,10 +16,10 @@ def apiRequest (url, params = {}):
 		return response.read()
 	except urllib2.HTTPError, err:
 		if err.code == 401:
-			app.logger.HTTPError("Error: Invalid API credentials")
+			app.logger.error("Error: Invalid API credentials")
 			#print "Error: Invalid API credentials";
 		elif err.code == 404:
-			app.logger.HTTPError("Error: The API endpoint is currently unavailable")
+			app.logger.error("Error: The API endpoint is currently unavailable")
 			#print "Error: The API endpoint is currently unavailable";
 		else:
 			print err
@@ -31,12 +31,12 @@ def get_stations():
 	decodedResponse	= json.loads(response)
 	if bool(decodedResponse):
 		if(decodedResponse['status'] == 'error'):
-			print "Error:", decodedResponse['error']
+			app.logger.error("Error: %s" , decodedResponse['error'])
 			return {}
 			# Check if API responded with success
 		elif(decodedResponse['status'] == 'success'):
 			# Print the amount of stations that were retrieved in this API call
-			print "API call success:", len(decodedResponse['stations']), "stations retrieved"
+			app.logger.info("API call success: %d stations retrieved", len(decodedResponse['stations']))
 			return decodedResponse['stations']
 		else:
 			return {}
@@ -48,11 +48,11 @@ def get_station(station_id):
 	# Check if API responded with an error
 	if bool(decodedResponse):
 		if(decodedResponse['status'] == 'error'):
-			print "Error:", decodedResponse['error']
+			app.logger.error("Error: %s" , decodedResponse['error'])
 			return {}
 		# Check if API responded with success
 		elif(decodedResponse['status'] == 'success'):
-			print "API call success, stations retrieved"
+			app.logger.info("API call success, stations retrieved")
 			return decodedResponse
 	else:
 		return {}
@@ -69,7 +69,7 @@ def get_timeseries(station_id, startDate, endDate):
     # Check if API responded with an error
 
     if(decodedResponse['status'] == 'error'):
-    	print "Error:", decodedResponse['error']
+    	app.logger.error("Error: %s" , decodedResponse['error'])
     # Check if API responded with success
     elif(decodedResponse['status'] == 'success'):
     	# Print the amount of stations that were retrieved in this API call
