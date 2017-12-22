@@ -1,1 +1,1 @@
-web: gunicorn weather-sensors:app
+web: gunicorn run:app

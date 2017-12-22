@@ -118,13 +118,12 @@
             <div class="chart">
               <div class="" style="height: 30px; width: 100%; padding: 5px 0; font-size: 12px; color: #000;">
                 Avg Speed: 3.5m/s
-
+              </div>
               <div class="compass">
                 <div class="direction">
-                  <p><span> {{ lastMeasuredWindDirection }} &deg;</span></p>
+                  <p><span> {{ lastMeasuredWindSpeed|tojson|safe }} m/s | {{ lastMeasuredWindDirection }} &deg;</span></p>
                 </div>
                 <div class="arrow {{ winddirectionClass }}"></div>
-              </div>
               </div>
               <div id='windGConfig'></div>
               <script>
@@ -172,12 +171,12 @@
                   ]
                 };
 
-                zingchart.render({
-                  id : 'windGConfig',
-                  data : windGConfig,
-                  height : "190px",
-                  width: "100%",
-                });
+                // zingchart.render({
+                //   id : 'windGConfig',
+                //   data : windGConfig,
+                //   height : "190px",
+                //   width: "100%",
+                // });
                 </script>
             </div>
           </div>
@@ -193,12 +192,6 @@
                   y: 0,
                   height: "100%",
                   width: "80%",
-                  subtitle:{
-                    text: "mm",
-                    y: 100,
-                    fontSize: 12,
-                    bold: false
-                  },
                   scaleY:{
                     lineColor: "none",
                     values: "0:100:10",
@@ -297,10 +290,10 @@
                         visble: false
                       },
                       valueBox:{
-                        text: "%v",
+                        text: "%v mm",
                         placement: "bottom-out",
                         offsetY: 0,
-                        fontSize: 16,
+                        fontSize: 12,
                         fontColor: "#515151",
                       }
                     }
@@ -320,11 +313,18 @@
             <div id="pressureGauge"></div>
             <script>
                 zingchart.THEME="classic";
+                var pressure = [];
+                pressure[0] = {{ lastMeasuredPressure|tojson|safe }};
+                var text = pressure[0] + " kPa"
+                if (pressure[0] == "No record"){
+                  pressure[0] = "";
+                  text = "No record"
+                }
                 var pressureConfig = {
                   type: "gauge",
                   backgroundColor: "transparent",
                   scaleR:{
-                   values: "0:10:1",
+                   values: "0:30:5",
                     aperture: 240,
                     tick:{
                       visible: false
@@ -345,7 +345,7 @@
                     sizeFactor: 1.2
                   },
                   "scale-r-2":{
-                    values: "0:100:10",
+                    values: "0:300:50",
                     aperture: 220,
                     tick:{
                       lineWidth: 2,
@@ -392,12 +392,12 @@
                   },
                   series : [
                     {
-                      values : [50],
+                      values : pressure,
                       backgroundColor: "#F8B237",
                       valueBox:{
-                        text: "%v",
+                        text: text,
                         placement: "center",
-                        offsetY: 40,
+                        offsetY: 60,
                         fontSize: 12,
                         fontColor: "#515151",
                       }
@@ -427,8 +427,8 @@
             <input id="tab2" type="radio" name="tabs">
             <label for="tab2">Precipitation</label>
 
-            <input id="tab3" type="radio" name="tabs">
-            <label for="tab3">Wind Speed</label>
+            <!-- <input id="tab3" type="radio" name="tabs">
+            <label for="tab3">Wind Speed</label> -->
 
             <section class="tabSection" id="content1">
               <div id="tempGraph">
@@ -552,7 +552,7 @@
               </script>
             </section>
 
-            <section class="tabSection" id="content3">
+            <!-- <section class="tabSection" id="content3">
               <div id="windChart"></div>
               <script>
               var windConfig = {
@@ -650,7 +650,7 @@
               });
 
               </script>
-            </section>
+            </section> -->
         </div>
 
       </div>
