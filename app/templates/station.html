@@ -442,7 +442,6 @@
               for (var i=0; i < timeList.length; i++) {
                 values.push(temp.temperature[timeList[i]]);
               }
-              console.log(temp.temperature);
               var myConfig = {
                 "type": "area",
                 "utc": true,
@@ -502,11 +501,11 @@
             <section class="tabSection" id="content2">
               <div id="precipitationChart"></div>
               <script>
-              timeList = {{ sortedTimeSeries|tojson|safe }};
               temp = {{ timeseries|tojson|safe }};
+              precipTimeList = (Object.keys(temp.precipitation)).sort();
               values=[];
               for (var i=0; i < timeList.length; i++) {
-                values.push(temp.precipitation[timeList[i]]);
+                values.push(temp.precipitation[precipTimeList[i]]);
               }
               var myConfig = {
                 "type":"heatmap",
@@ -553,6 +552,69 @@
               });
               </script>
             </section>
+            <section class="tabSection" id="content3">
+              <div id="pressureSection"></div>
+              <script>
+              temp = {{ timeseries|tojson|safe }};
+              pressureTimeList = (Object.keys(temp.atmosphericpressure)).sort();
+              values=[];
+              for (var i=0; i < timeList.length; i++) {
+                values.push(temp.atmosphericpressure[pressureTimeList[i]]);
+              }
+              var pressureSecConfig = {
+                "type": "area",
+                "utc": true,
+                 "scaleX":{
+                   "minValue": '{{ startTime }}',
+                   "step": 3600000,
+                    "transform":{
+                     "type": 'date',
+                     "all": '%D, %d %M<br>%h:%i %A',
+                     "itemsOverlap": true
+                   },
+                   "item": {
+                     "fontSize": 10
+                   },
+                   "maxItems": 13,
+                   "guide": {
+                     "visible": false
+                   }
+                 },
+                 "scale-y":{
+                   "values":"99:105:0.5",
+                   "format":"%v \u00B0C",
+                   "guide":{
+                     "visible":false
+                   }
+                 },
+                "plot":{
+                  "tooltip": {
+                      "visible": true
+                    }
+                },
+                "series": [
+                  {
+                  "values": values,
+                  "lineColor": '#03A9F4',
+                  "backgroundColor":"#03A9F4",
+                  "lineWidth":0.5,
+                  "marker": {
+                    "backgroundColor": '#03A9F4',
+                    "borderWidth": 0,
+                    "size": 2
+                  }
+                }
+              ]
+              };
+
+              zingchart.render({
+                id : 'pressureSection',
+                data : pressureSecConfig,
+                height: "200px",
+                width: "100%"
+              });
+              </script>
+            </section>
 
             <!-- <section class="tabSection" id="content3">
               <div id="windChart"></div>
@@ -585,7 +647,7 @@
                                       "hook":"node:plot=1,index=4"
                                   },
                                   "to":{
-                                      "hook":"node:plot=0,index=3"
+                                      "hook":>"node:plot=0,index=3"
                                   }
                               }
                           ],
