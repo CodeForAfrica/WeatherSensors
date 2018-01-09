@@ -20,11 +20,12 @@
     </div>
   </section>
 
-  <div class="album text-muted">
+  <div class="album">
     <div class="container">
 
       <div class="row">
         <div class="col-md-12 col-lg-12">
+          <h4 class="text-center">Current Weather Condition</h4>
           <div class="card col-lg-3 col-md-3 col-sm-12">
 
             <p class="card-text">TEMPERATURE</p>
@@ -53,15 +54,15 @@
                     "background-repeat":false,
                     "rules":[
                       {
-                        "rule":"%v >= 27",
+                        "rule":"%v >= 28",
                         "background-image":"//www.zingchart.com/package/examples/images/sunny.png"
                       },
                       {
-                        "rule":"%v >= 19 && %v <= 26",
+                        "rule":"%v >= 22 && %v <= 27",
                         "background-image":"//www.zingchart.com/package/examples/images/partly-cloudy.png"
                       },
                       {
-                        "rule":"%v <= 18",
+                        "rule":"%v <= 21",
                         "background-image":"//www.zingchart.com/package/examples/images/cloudy.png"
                       }
                     ],
@@ -419,6 +420,7 @@
         <div class="col-md-12">
           <section="timeseries">
           <div class="col-md-12">
+            <h4 class="text-center">Weather Condition for the past 12 hours</h4>
             <div style="padding: 5 30px">
 
             <input id="tab1" type="radio" name="tabs" checked>
@@ -427,8 +429,8 @@
             <input id="tab2" type="radio" name="tabs">
             <label for="tab2">Precipitation</label>
 
-            <!-- <input id="tab3" type="radio" name="tabs">
-            <label for="tab3">Wind Speed</label> -->
+            <input id="tab3" type="radio" name="tabs">
+            <label for="tab3">Pressure</label>
 
             <section class="tabSection" id="content1">
               <div id="tempGraph">

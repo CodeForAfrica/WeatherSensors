@@ -67,10 +67,10 @@ a:hover {
 
 .card {
   float: left;
-  padding: .75rem;
+  padding: 0 .75rem;
   margin-bottom: 2rem;
   min-height: 10rem;
-  border: 0;
+/*  border: 0;*/
 }
 
 .chart {
@@ -85,13 +85,20 @@ a:hover {
   margin-bottom: 0;
 }
 .card > p {
-  margin-bottom: .75rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  margin-left: -0.75rem;
+  margin-right: -0.75rem;
+  padding-top: 0.5rem;
+  background-color: lightgrey;
 }
 
 .card-text {
-  font-size: 85%;
+  font-size: 100%;
   text-align: center;
   color: #000;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(0,0,0,.125);
 }
 
 .compass {
@@ -100,6 +107,7 @@ a:hover {
   height: 30px;*/
   width: 140px;
   height: 140px;
+  margin-left: 20%;
   /*float: right;*/
   border-radius: 100%;
   box-shadow: 0 0 10px rgba(0, 0, 0, .85);
@@ -107,14 +115,24 @@ a:hover {
   color: #000;
   text-shadow: 1px 1px 1px white;
 }
+
 .compass:before {
     font-weight: bold;
     position: absolute;
     text-align: center;
     width: 100%;
     content: "N";
-    font-size: 12px;
+    font-size: 13px;
     top: -2px;
+}
+.compass:after {
+    font-weight: bold;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    content: "S";
+    font-size: 13px;
+    bottom: -2px;
 }
 .direction {
   height: 100%;
@@ -207,10 +225,10 @@ label {
   display: inline-block;
   margin: 0 0 -1px;
   padding: 10px 20px;
-  font-weight: 400;
-  font-size: 12px;
+  font-weight: 500;
+  font-size: 14px;
   text-align: center;
-  color: #bbb;
+  /*color: #bbb;*/
   font-family: Circular-Medium,sans-serif;
   border: 1px solid transparent;
 }
@@ -226,11 +244,11 @@ label[for*='1']:before {
 }
 
 label[for*='2']:before {
-  content: '\f17d';
+  content: '\f0e9';
 }
 
 label[for*='3']:before {
-  content: '\f16b';
+  content: '\f0e4';
 }
 
 label[for*='4']:before {
@@ -243,7 +261,7 @@ label:hover {
 }
 
 input:checked + label {
-  color: #555;
+  /*color: #555;*/
   border: 1px solid #ddd;
   border-top: 2px solid orange;
   border-bottom: 1px solid #fff;
