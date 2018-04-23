@@ -1,0 +1,51 @@
+<!-- base.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{% block title %}{% endblock %}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/bootstrap/bootstrap.min.css') }}">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/album.css') }}">
+    <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+  </head>
+    <body>
+
+      <header>
+        <div class="navbar navbar-dark bg-dark">
+          <div class="d-flex justify-content-between" style="position: relative; left: 68%">
+            <a href="/" class="navbar-brand">Weather</a>
+            <a href="/station" class="navbar-brand">Map</a>
+            <div class="dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Stations</a>
+              <div class="dropdown-menu" id="stationsDropDown" aria-labelledby="dropdown01">
+                {%block dropdown %}{% endblock %}
+              </div>
+          </div>
+          </div>
+        </div>
+      </header>
+      {% block body %}
+      {% endblock %}
+      <footer class="footer">
+      </footer>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+      <script src="{{ url_for('static', filename='js/vendor/jquery.min.js') }}"></script>
+      <script src="{{ url_for('static', filename='js/vendor/popper.min.js') }}"></script>
+      <script src="{{ url_for('static', filename='js/bootstrap/bootstrap.min.js') }}"></script>
+      <script src="{{ url_for('static', filename='js/vendor/holder.min.js') }}"></script>
+
+      <script type="text/javascript" src="http://static.fusioncharts.com/code/latest/fusioncharts.js"></script>
+      <script type="text/javascript" src="http://static.fusioncharts.com/code/latest/themes/fusioncharts.theme.fint.js?cacheBust=56"></script>
+
+      <script>
+        Holder.addTheme('thumb', {
+          bg: '#55595c',
+          fg: '#eceeef',
+          text: 'Thumbnail'
+        });
+      </script>
+  </body>
+</html>
