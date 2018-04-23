@@ -1,6 +1,24 @@
 {"stations":
   [
     {
+      "name":"Mbagala Secodary School",
+      "location":{
+        "lng":39.290380,
+        "lat":-6.912997
+        },
+        "countryCode":"TZ",
+        "elevation":154,
+        "active":true,
+        "lastMeasurement":"2016-08-13T10:00:00.000Z",
+        "firstMeasurement":"2016-05-10T22:10:00.000Z",
+        "variables":["radiation","winddirection","windspeed","windgusts","precipitation","electricalconductivity","vaporpressure","temperature","relativehumidity","atmosphericpressure"],
+        "timezoneOffset":-180,
+        "battery":100,
+        "timezone":"Africa/Nairobi",
+        "id":"TA00099",
+        "deviceId":"5G0F5905"
+    },
+    {
       "name":"Ndoombo",
       "location":{
         "lng":36.77194,
