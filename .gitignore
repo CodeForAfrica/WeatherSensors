@@ -2,3 +2,4 @@ venv/
 info.log*
 app/*.pyc
 *.pyc
+.env

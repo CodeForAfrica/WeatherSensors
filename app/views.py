@@ -4,16 +4,17 @@ from flask import render_template
 from app import app
 from flask_googlemaps import GoogleMaps
 from flask_googlemaps import Map
-import services
+from services import tahmo
 import datetime, calendar
 import json
 import logging
+import os
 
 @app.route('/')
 def index():
     #choosen default station for home, BRT
-    stations = services.get_stations()
-    station = services.get_station("TA00273")
+    stations = tahmo.get_stations()
+    station = tahmo.get_station(os.getenv("DEFAULT_STATION"))
     if bool(station['timeseries']):
         timeseries=station['timeseries']
         sortedTimeSeries = sorted(timeseries["temperature"].keys())
@@ -64,7 +65,7 @@ def index():
         return render_template('404.html', message=message, stations=stations), 404
 @app.route('/station')
 def stations():
-    stations = services.get_stations()
+    stations = tahmo.get_stations()
     marker = []
     for station in stations:
         station["location"]["infobox"] = "<a href=/station/" + station["id"]+">" + station["name"] + "</a>"
@@ -83,8 +84,8 @@ def stations():
 
 @app.route('/station/<station_id>')
 def station(station_id):
-    stations = services.get_stations()
-    station = services.get_station(station_id)
+    stations = tahmo.get_stations()
+    station = tahmo.get_station(station_id)
     if bool(station['timeseries']):
         timeseries=station['timeseries']
         sortedTimeSeries = sorted(timeseries["temperature"].keys())
@@ -136,31 +137,31 @@ def station(station_id):
 
 @app.errorhandler(404)
 def page_not_found(e):
-    stations = services.get_stations()
+    stations = tahmo.get_stations()
     message = "Page not found"
     return render_template('404.html', message=message, stations=stations), 404
 
 @app.errorhandler(403)
 def page_not_found(e):
-    stations = services.get_stations()
+    stations = tahmo.get_stations()
     message = "Page is forbidden"
     return render_template('404.html', message=message, stations=stations), 403
 
 @app.errorhandler(410)
 def page_not_found(e):
-    stations = services.get_stations()
+    stations = tahmo.get_stations()
     message = "Page is gone"
     return render_template('404.html', message=message, stations=stations), 410
 
 @app.errorhandler(500)
 def page_not_found(e):
-    stations = services.get_stations()
+    stations = tahmo.get_stations()
     message = "Internal Error"
     return render_template('404.html', message=message, stations=stations), 500
 
 @app.errorhandler(501)
 def page_not_found(e):
-    stations = services.get_stations()
+    stations = tahmo.get_stations()
     message = "Internal Error"
     return render_template('404.html', message=message, stations=stations), 501
 
