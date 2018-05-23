@@ -1,698 +1,124 @@
 <!-- index.html-->
 
-{% extends "base.html" %}
-{% block title %}Home{% endblock %}
-{% block dropdown %}
+{% extends "base.html" %} 
+{% block title %}Home{% endblock %} 
+{% block dropdown %} 
   {% for station in stations %}
-    <a class="dropdown-item" href="/station/{{ station["id"] }}">{{ station["name"] }}</a>
-  {% endfor %}
-{% endblock %}
+    <a class="dropdown-item" href="/station/{{ station[" id "] }}">{{ station["name"] }}</a>
+  {% endfor %} 
+{% endblock %} 
 {% block body %}
-  <main role="main">
-    <section class="jumbotron text-center city-info">
-      <div class="container">
-        <h1 class="jumbotron-heading">Weather Stations for Tanzania</h1>
-        <p class="lead"> {{ station["name"] }}, Dar-es-salaam</p>
-        <p>
-          <!-- <a href="/stations" class="btn btn-primary">Find Other Stations</a> -->
-          <!-- <a href="#" class="btn btn-secondary">Secondary action</a> -->
-        </p>
-      </div>
-    </section>
+<main role="main">
+  <section class="jumbotron text-center city-info">
+    <div class="container">
+      <h1 class="jumbotron-heading">Weather Stations for Tanzania</h1>
+      <!-- <p class="lead"> {{ station["name"] }}, Dar-es-salaam</p> -->
+      <p class="lead">Mbagala Kuu Primary School</p>
+    </div>
+  </section>
 
-    <div class="album">
-      <div class="container">
+  <div class="album">
+    <div class="container">
 
-        <div class="row">
-          <div class="col-md-12 col-lg-12">
-            <h4 class="text-center">Current Weather Condition</h4>
-            <div class="card col-lg-3 col-md-3 col-sm-12">
-
-              <p class="card-text">TEMPERATURE</p>
-              <div id="temperatureGauge"></div>
-              <script>
-                var temp = {{ lastMeasuredTemp|tojson|safe }};
-                var scaleFX = [];
-                var scaleFY = [];
-                scaleFY[0] = temp;
-                scaleFX[0] = temp + '\260' +"C";
-              //  "backgroundImage":"//demos.zingchart.com/view/7K22ESPL/sunny-sky.jpg",
-              //  "background-fit":'xy',
-                var myTempConfig = {
-                    "type": "heatmap",
-                    "plot":{
-                      "tooltip":{
-                        "text":"It is %kl in Dar-es-salaam!",
-                        "background-color":"white",
-                        "alpha":0.9,
-                        "font-family":"Georgia",
-                        "font-color":"#000",
-                        "font-size":13
-                      },
-                      "aspect":"none",
-                      "background-color":"none",
-                      "background-repeat":false,
-                      "rules":[
-                        {
-                          "rule":"%v >= 28",
-                          "background-image":"//www.zingchart.com/package/examples/images/sunny.png"
-                        },
-                        {
-                          "rule":"%v >= 22 && %v <= 27",
-                          "background-image":"//www.zingchart.com/package/examples/images/partly-cloudy.png"
-                        },
-                        {
-                          "rule":"%v <= 21",
-                          "background-image":"//www.zingchart.com/package/examples/images/cloudy.png"
-                        }
-                      ],
-                      "hover-state":{
-                        "background-color":"#006699"
-                      }
-                    },
-                    "scale-x":{
-                      "labels":scaleFX,
-                      "line-color":"none",
-                      "guide":{
-                        "visible":false
-                      },
-                      "tick":{
-                        "visible":false
-                      },
-                      "item":{
-                        "font-color": "#515151",//"#024567",
-                        "font-size":12
-                      }
-                    },
-                    "scale-y":{
-                      "visible": false
-                      // "labels":scaleFY,
-                      // "line-color":"none",
-                      // "guide":{
-                      //   "visible":false
-                      // },
-                      // "tick":{
-                      //   "visible":false
-                      // }
-                    },
-                    "plotarea":{
-                      "margin-left":"dynamic",
-                    },
-                    "series": [
-                      {
-                        "values": scaleFY,
-                        "data-weather":["sunny"]
-                      },
-                    ]
-                    };
-
-                    zingchart.render({
-                    id : 'temperatureGauge',
-                    data : myTempConfig,
-                    height: "220px",
-                    width: "100%"
-                    });
-              </script>
-            </div>
-            <div class="card col-lg-3 col-md-3 col-sm-12">
-              <p class="card-text">WIND SPEED | WIND DIRECTION</p>
-              <div class="chart">
-                <div class="" style="height: 40px; width: 100%; padding: 5px 0; font-size: 12px; color: #000;">
-                  Avg Speed: 3.5m/s
-
-
-                </div>
-                <div class="compass">
-                  <div class="direction">
-                    <p><span> {{ lastMeasuredWindSpeed|tojson|safe }} m/s | {{ lastMeasuredWindDirection }} &deg;</span></p>
-                  </div>
-                  <div class="arrow {{ winddirectionClass }}"></div>
-                </div>
-                <div id='windGConfig'></div>
-                <script>
-                  var speed = [];
-                  speed[0] = {{ lastMeasuredWindSpeed|tojson|safe }};
-                  var windGConfig = {
-                    "type":"gauge",
-                    "background-color":"transparent",
-                    "bgcolor": "transparent",
-                    "scale":{
-                      "size-factor":1
-                    },
-                    "scale-r":{ //Default Scale
-                      "aperture":200,
-                      "values":"0:5:1",
-                      "center":{
-                        "size": 5,
-                   	    "background-color":"#66CCFF #FFCCFF",
-                   	    "border-color":"none"
-                      }
-                      // "tick":{
-                      //   "line-width":1,
-                      //   "line-color":"black",
-                      //   "size":10
-                      // },
-                      // "minor-ticks":4,
-                      // "minor-tick":{
-                      //   "line-color":"black",
-                      //   "visible":true,
-                      //   "size":6,
-                      //   "placement":"inner"
-                      // },
-                    },
-                    "series":[
-                      {
-                        "values":speed,
-                        "valueBox":{
-                    			  "text": "%v m/s",
-                    			  "placement": "center",
-                    			  "offsetY": 45,
-                    			  "fontSize": 12,
-                    			  "fontColor": "#515151",
-                    			}
-                      }
-                    ]
-                  };
-
-                  // zingchart.render({
-                  // 	id : 'windGConfig',
-                  // 	data : windGConfig,
-                  // 	height : "190px",
-                  // 	width: "100%",
-                  // });
-                  </script>
-              </div>
-            </div>
-            <div class="card col-lg-3 col-md-3 col-sm-12">
-              <p class="card-text">PRECIPITATION</p>
-              <div id="precipitationGauge"></div>
-              <script>
-                var precip = [];
-                precip[0] = {{ lastMeasuredPrecip|tojson|safe }};
-                var precipitationConfig = {
-                    type:"bar",
-                    x: "10%",
-                    y: 0,
-                    height: "100%",
-                    width: "80%",
-                    scaleY:{
-                      lineColor: "none",
-                      values: "0:100:10",
-                      guide:{
-                        visible: false
-                      },
-                      tick:{
-                        margin: 1,
-                        lineWidth: 1,
-                        size: 10,
-                        lineColor: "#5F5F5F",
-                        placement: "outter",
-                        rules:[
-                          {
-                            rule: "%i % 2 == 1",
-                            lineWidth: 1
-                          }
-                        ]
-                      },
-                      minorTicks: 4,
-                      minorTick: {
-                        lineColor: "#C1C1C1",
-                        placement: "inner",
-                        size: 6
-                      },
-                      item:{
-                        fontSize: 12,
-                        rules:[
-                          {
-                            rule: "%i % 2 == 1",
-                            visible: false
-                          }
-                        ]
-                      }
-                    },
-                    "scale-y-2":{
-                      values: "0:100:10",
-                      lineColor: "none",
-                      item:{
-                        visible: false
-                      },
-                      guide:{
-                        visible: false
-                      },
-                      tick:{
-                        placement: "inner",
-                        size: 40,
-                        padding: 0,
-                        margin: 0,
-                        offsetX: 50,
-                        lineColor: "#fff",
-                        rules:[
-                          {
-                            rule: "%i == 0 || %i == 10",
-                            visible: false
-                          }
-                        ]
-                      }
-                    },
-                    plot:{
-                      barsOverlap: "100%",
-                      borderRadius: 2,
-                      hoverState: {
-                        visible: false
-                      },
-                      tooltip:{
-                        visible: false
-                      }
-                    },
-                    plotarea:{
-                      marginBottom: "30%",
-                      marginTop: "10%",
-                      _marginRight: "35%"
-                    },
-                    scaleX:{
-                      visible: false
-                    },
-                    series:[
-                      {
-                        values: [100],
-                        backgroundColor: "#fff",
-                        borderWidth: 4,
-                        borderColor: "#C1C1C1",
-                        maxTrackers: 0,
-                        barWidth: "100%",
-                        tooltip:{
-                          visble: false
-                        }
-                      },
-                      {
-                        values: precip,
-                        backgroundColor: "#F8B237",
-                        barWidth: "93%",
-                        maxTrackers: 0,
-                        tooltip:{
-                          visble: false
-                        },
-                        valueBox:{
-                          text: "%v mm",
-                          placement: "bottom-out",
-                          offsetY: 0,
-                          fontSize: 12,
-                          fontColor: "#515151",
-                        }
-                      }
-                    ]
-                  };
-                  zingchart.render({
-                  id : 'precipitationGauge',
-                  data : precipitationConfig,
-                  height: "220px",
-                  width: "100%"
-                  });
-              </script>
-            </div>
-
-            <div class="card col-lg-3 col-md-3 col-sm-12">
-              <p class="card-text">PRESSURE</p>
-              <div id="pressureGauge"></div>
-              <script>
-                  zingchart.THEME="classic";
-                  var pressure = [];
-                  pressure[0] = {{ lastMeasuredPressure|tojson|safe }};
-                  var text = pressure[0] + " kPa"
-                  if (pressure[0] == "No record"){
-                    pressure[0] = "";
-                    text = "No record"
-                  }
-                  var pressureConfig = {
-                    type: "gauge",
-                    backgroundColor: "transparent",
-                   	scaleR:{
-                   	 values: "0:30:5",
-                   	  aperture: 240,
-                   	  tick:{
-                   	    visible: false
-                   	  },
-                   	  item:{
-                   	    visible: false
-                   	  },
-                   	  ring:{
-                        backgroundColor: "transparent",
-                   	   // backgroundColor: "#C1C1C1",
-                   	    size: 10
-                   	  },
-                   	  center:{
-                   	    visible: false
-                   	  }
-                   	},
-                   	scale:{
-                   	  sizeFactor: 1.2
-                   	},
-                   	"scale-r-2":{
-                   	  values: "0:300:50",
-                   	  aperture: 220,
-                      tick:{
-                        lineWidth: 2,
-                        size: 6,
-                        lineColor: "#5F5F5F",
-                        placement: "outter"
-                      },
-                      minorTicks: 4,
-                      minorTick: {
-                        lineColor: "#C1C1C1",
-                        placement: "inner",
-                        size: 6
-                      },
-                      ring:{
-                        visible: false
-                      },
-                      item:{
-                        offsetR: -1,
-                        fontSize: 12
-                      },
-                      center:{
-                   	    size: 5,
-                        backgroundColor: "transparent",
-                   	   // backgroundColor:"#BEBEBE",
-                   	   // borderWidth: 1,
-                   	   // borderColor: "#5F5F5F"
-                   	  },
-                   	  label:{
-                   	    text: "text"
-                   	  }
-                   	},
-                   	"scale-2":{
-                   	  sizeFactor: 0.7
-                   	},
-                   	plot:{
-                   	  size: "56%",
-                  		csize: "14%",
-                  		tooltip:{
-                  		  visible: false
-                  		}
-                   	},
-                   	plotarea:{
-                   	  marginBottom: "20%"
-                   	},
-                  	series : [
-                  		{
-                  			values : pressure,
-                  			backgroundColor: "#F8B237",
-                  			valueBox:{
-                  			  text: text,
-                  			  placement: "center",
-                  			  offsetY: 60,
-                  			  fontSize: 12,
-                  			  fontColor: "#515151",
-                  			}
-
-                  		}
-                  	]
-                  };
-
-                zingchart.render({
-                id : 'pressureGauge',
-                data : pressureConfig,
-                height: "220px",
-                width: "100%"
-                });
-              </script>
-
+      <div class="row">
+        <div class="col-md-12 col-lg-12">
+          <h4 class="text-center">Current Weather Condition</h4>
+          <div class="card col-lg-3 col-md-3 col-sm-12">
+            <p class="card-text">TEMPERATURE</p>
+            <div class="text-center">
+              <h1 class="wi wi-thermometer">
+                  {{ cft_lastMeasuredTemp }}
+              </h1>
+              <h1 class="wi wi-celsius"></h1>              
             </div>
           </div>
-          <div class="col-md-12">
-            <section="timeseries">
+          <div class="card col-lg-3 col-md-3 col-sm-12">
+            <p class="card-text">HUMIDITY</p>
+            <div class="text-center">
+              <h1 class="wi wi-humidity">
+                {{ cft_lastMeasuredHumidity }}
+              </h1>
+            </div>
+          </div>
+          <div class="card col-lg-3 col-md-3 col-sm-12">
+            <p class="card-text">PM10 µg/m³ </p>
+            <div class="text-center">
+              <h1 class="wi wi-dust">
+                {{ p1 }}
+              </h1>
+            </div>
+            <script>
+
+            </script>
+          </div>
+
+          <div class="card col-lg-3 col-md-3 col-sm-12">
+            <p class="card-text">PM2.5 µg/m³</p>
+            <div class="text-center">
+              <h1 class="wi wi-smoke">
+                {{ p2 }}
+              </h1>
+            </div>
+            <script>
+
+            </script>
+
+          </div>
+        </div>
+
+        <div class="col-md-12" style="display: none;">
+          <section="timeseries">
             <div class="col-md-12">
               <h4 class="text-center">Weather Condition for the past 12 hours</h4>
               <div style="padding: 5 30px">
 
-              <input id="tab1" type="radio" name="tabs" checked>
-              <label for="tab1">Temperature</label>
+                <input id="tab1" type="radio" name="tabs" checked>
+                <label for="tab1">Temperature</label>
 
-              <input id="tab2" type="radio" name="tabs">
-              <label for="tab2">Precipitation</label>
+                <input id="tab2" type="radio" name="tabs">
+                <label for="tab2">Humidity</label>
 
-            <input id="tab3" type="radio" name="tabs">
-              <label for="tab3">Pressure</label>
+                <input id="tab3" type="radio" name="tabs">
+                <label for="tab3">PM10 µg/m³</label>
 
-            <input id="tab4" type="radio" name="tabs">
-            <label for="tab4">Air Quality</label>
+                <input id="tab4" type="radio" name="tabs">
+                <label for="tab4">PM2.5 µg/m³</label>
 
-              <section class="tabSection" id="content1">
-                <div id="tempGraph">
-                </div>
-                <script type=text/javascript>
-                timeList = {{ sortedTimeSeries|tojson|safe }};
-                temp = {{ timeseries|tojson|safe }};
-                values=[];
-                for (var i=0; i < timeList.length; i++) {
-                  values.push(temp.temperature[timeList[i]]);
-                }
-                console.log(temp.temperature);
-                var myConfig = {
-                  "type": "area",
-                  "utc": true,
-                   "scaleX":{
-                     "minValue": '{{ startTime }}',
-                     "step": 3600000,
-                      "transform":{
-                       "type": 'date',
-                       "all": '%D, %d %M<br>%h:%i %A',
-                       "itemsOverlap": true
-                     },
-                     "item": {
-                       "fontSize": 10
-                     },
-                     "maxItems": 13,
-                     "guide": {
-                       "visible": false
-                     }
-                   },
-                   "scale-y":{
-                     "values":"20:35:2",
-                     "format":"%v \u00B0C",
-                     "guide":{
-                       "visible":false
-                     }
-                   },
-                  "plot":{
-                    "tooltip": {
-                        "visible": true
-                      }
-                  },
-                  "series": [
-                    {
-                    "values": values,
-                    "lineColor": '#03A9F4',
-                    "backgroundColor":"#03A9F4",
-                    "lineWidth":0.5,
-                    "marker": {
-                      "backgroundColor": '#03A9F4',
-                      "borderWidth": 0,
-                      "size": 2
-                    }
-                  }
-                ]
-                };
+                <section class="tabSection" id="content1">
+                  <div id="tempGraph">
+                  </div>
+                  <script type=text/javascript>
+                  
+                  </script>
 
-                zingchart.render({
-                	id : 'tempGraph',
-                	data : myConfig,
-                	height: "200px",
-                	width: "100%"
-                });
-                </script>
+                </section>
 
-              </section>
+                <section class="tabSection" id="content2">
+                  <div id="precipitationChart"></div>
+                  <script>
 
-              <section class="tabSection" id="content2">
-                <div id="precipitationChart"></div>
-                <script>
-                temp = {{ timeseries|tojson|safe }};
-                precipTimeList = (Object.keys(temp.precipitation)).sort();
-                values=[];
-                for (var i=0; i < timeList.length; i++) {
-                  values.push(temp.precipitation[precipTimeList[i]]);
-                }
-                var myConfig = {
-                  "type":"heatmap",
-                  "plot":{
-                    "aspect":"vertical"
-                  },
-                  "plotarea":{
-                    "adjust-layout":"auto"
-                  },
-                  "utc": true,
-                  "scaleY": {
-                    "visible": false
-                  },
-                   "scaleX":{
-                     "minValue": '{{ startTime }}',
-                     "step": 3600000,
-                      "transform":{
-                       "type": 'date',
-                       "all": '%D, %d %M<br>%h:%i %A',
-                       "itemsOverlap": true
-                     },
-                     "item": {
-                       "fontSize": 10
-                     },
-                     "maxItems": 13,
-                     "guide": {
-                       "visible": false
-                     }
-                   },
-                  "series":[
-                    {
-                      "values": values
-                      // "min-ratio":0,
-                      // "max-ratio":0.3
-                    }
-                  ]
-                };
+                  </script>
+                </section>
 
-                zingchart.render({
-                  id : 'precipitationChart',
-                  data : myConfig,
-                  height : "100px",
-                  width: "100%"
-                });
-                </script>
-              </section>
+                <section class="tabSection" id="content3">
+                  <div id="pressureSection"></div>
+                  <script>
 
-              <section class="tabSection" id="content3">
-                <div id="pressureSection"></div>
-                <script>
-                temp = {{ timeseries|tojson|safe }};
-                pressureTimeList = (Object.keys(temp.atmosphericpressure)).sort();
-                values=[];
-                for (var i=0; i < timeList.length; i++) {
-                  values.push(temp.atmosphericpressure[pressureTimeList[i]]);
-                }
-                var pressureSecConfig = {
-                  "type": "area",
-                  "utc": true,
-                   "scaleX":{
-                     "minValue": '{{ startTime }}',
-                     "step": 3600000,
-                      "transform":{
-                       "type": 'date',
-                       "all": '%D, %d %M<br>%h:%i %A',
-                       "itemsOverlap": true
-                     },
-                     "item": {
-                       "fontSize": 10
-                     },
-                     "maxItems": 13,
-                     "guide": {
-                       "visible": false
-                     }
-                   },
-                   "scale-y":{
-                     "values":"99:105:0.5",
-                     "format":"%v \u00B0C",
-                     "guide":{
-                       "visible":false
-                     }
-                   },
-                  "plot":{
-                    "tooltip": {
-                        "visible": true
-                      }
-                  },
-                  "series": [
-                    {
-                    "values": values,
-                    "lineColor": '#03A9F4',
-                    "backgroundColor":"#03A9F4",
-                    "lineWidth":0.5,
-                    "marker": {
-                      "backgroundColor": '#03A9F4',
-                      "borderWidth": 0,
-                      "size": 2
-                    }
-                  }
-                ]
-                };
+                  </script>
+                </section>
+                <section class="tabSection" id="content4">
+                  <div id="aqSection"></div>
+                  <script>
 
-                zingchart.render({
-                  id : 'pressureSection',
-                  data : pressureSecConfig,
-                  height: "200px",
-                  width: "100%"
-                });
-                </script>
-              </section>
-              <section class="tabSection" id="content4">
-                <div id="aqSection"></div>
-                <script>
-                temp = {{ timeseries|tojson|safe }};
-                pressureTimeList = (Object.keys(temp.atmosphericpressure)).sort();
-                values=[];
-                for (var i=0; i < timeList.length; i++) {
-                  values.push(temp.atmosphericpressure[pressureTimeList[i]]);
-                }
-                var pressureSecConfig = {
-                  "type": "area",
-                  "utc": true,
-                   "scaleX":{
-                     "minValue": '{{ startTime }}',
-                     "step": 3600000,
-                      "transform":{
-                       "type": 'date',
-                       "all": '%D, %d %M<br>%h:%i %A',
-                       "itemsOverlap": true
-                     },
-                     "item": {
-                       "fontSize": 10
-                     },
-                     "maxItems": 13,
-                     "guide": {
-                       "visible": false
-                     }
-                   },
-                   "scale-y":{
-                     "values":"99:105:0.5",
-                     "format":"%v \u00B0C",
-                     "guide":{
-                       "visible":false
-                     }
-                   },
-                  "plot":{
-                    "tooltip": {
-                        "visible": true
-                      }
-                  },
-                  "series": [
-                    {
-                    "values": values,
-                    "lineColor": '#03A9F4',
-                    "backgroundColor":"#03A9F4",
-                    "lineWidth":0.5,
-                    "marker": {
-                      "backgroundColor": '#03A9F4',
-                      "borderWidth": 0,
-                      "size": 2
-                    }
-                  }
-                ]
-                };
+                  </script>
+                </section>
+              </div>
 
-                zingchart.render({
-                  id : 'pressureSection',
-                  data : pressureSecConfig,
-                  height: "200px",
-                  width: "100%"
-                });
-                </script>
-              </section>
-          </div>
-
+            </div>
+          </section>
         </div>
-
       </div>
     </div>
-
-  </main>
-</section>
+</main>
 
 {% endblock %}

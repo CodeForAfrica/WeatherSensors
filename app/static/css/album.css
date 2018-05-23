@@ -3,7 +3,6 @@
 @import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
 
 body {
-  min-height: 75rem; /* Can be removed; just added for demo purposes */
   font: 14px/1 'Open Sans', sans-serif;
 }
 .bg-dark {
@@ -59,7 +58,6 @@ a:hover {
 }
 
 .album {
-  min-height: 50rem; /* Can be removed; just added for demo purposes */
   padding-top: 1rem;
   padding-bottom: 3rem;
   background-color: #f7f7f7;

@@ -4,7 +4,7 @@ from flask import render_template
 from app import app
 from flask_googlemaps import GoogleMaps
 from flask_googlemaps import Map
-from services import tahmo
+from services import cft, tahmo
 import datetime, calendar
 import json
 import logging
@@ -12,6 +12,19 @@ import os
 
 @app.route('/')
 def index():
+    # AQsensors
+    # nodes = cft.get_stations()mValues
+    node = json.loads(cft.get_station(os.getenv("DEFAULT_NODE")))
+    pmValues = node['sensors'][0]['sensordatas'][0]['sensordatavalues']
+
+    dhtValues = node['sensors'][1]['sensordatas'][1]['sensordatavalues']
+    
+    p2 = pmValues[0]['value']
+    p1 = pmValues[1]['value']
+
+    cft_lastMeasuredTemp = dhtValues[1]['value']
+    cft_lastMeasuredHumidity = dhtValues[0]['value']
+
     #choosen default station for home, BRT
     stations = tahmo.get_stations()
     station = tahmo.get_station(os.getenv("DEFAULT_STATION"))
@@ -58,6 +71,10 @@ def index():
     lastMeasuredPressure=lastMeasuredPressure,
     lastMeasuredHumidity=lastMeasuredHumidity,
     sortedTimeSeries=sortedTimeSeries,
+    p1=p1,
+    p2=p2,
+    cft_lastMeasuredHumidity=cft_lastMeasuredHumidity,
+    cft_lastMeasuredTemp=cft_lastMeasuredTemp,
     winddirectionClass=winddirectionClass)
     else:
         station = station['station']
